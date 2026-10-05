@@ -1,0 +1,528 @@
+{
+  "startedAt": "2026-10-05T19:46:16.594Z",
+  "boundary": "DEVELOPMENT; public key; three ordinary sessions",
+  "setup": "Two fresh disposable leagues; no reuse of previous test state",
+  "results": [
+    {
+      "id": "1",
+      "actor": "A",
+      "operation": "create_league RPC and own league/member SELECT",
+      "expected": "Fresh league with A as sole commissioner",
+      "actual": "Exactly one membership; A commissioner; creator is A",
+      "status": "PASS",
+      "errorCodes": [],
+      "protectedDataUnchanged": "not applicable"
+    },
+    {
+      "id": "setup",
+      "actor": "C",
+      "operation": "Create independent League 2",
+      "expected": "C sole commissioner; distinct league UUID",
+      "actual": "Fresh separate league; exactly one C commissioner",
+      "status": "PASS",
+      "errorCodes": [],
+      "protectedDataUnchanged": "not applicable"
+    },
+    {
+      "id": "F/initial",
+      "actor": "A/C",
+      "operation": "Check both fixture invite formats",
+      "expected": "Both match ^[A-HJ-NP-R]{20}$",
+      "actual": "Both codes inspected without printing them",
+      "status": "PASS",
+      "errorCodes": [],
+      "protectedDataUnchanged": "not applicable"
+    },
+    {
+      "id": "2",
+      "actor": "B",
+      "operation": "join_league with current valid invite",
+      "expected": "B ordinary member; already_member false",
+      "actual": "Membership and returned flag checked",
+      "status": "PASS",
+      "errorCodes": [],
+      "protectedDataUnchanged": "not applicable"
+    },
+    {
+      "id": "3/A",
+      "actor": "C",
+      "operation": "Direct SELECT League 1 and memberships using UUID",
+      "expected": "No visible rows; C does not join",
+      "actual": "Both queries returned no accessible rows; memberships unchanged",
+      "status": "PASS",
+      "errorCodes": [],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "4/B",
+      "actor": "B",
+      "operation": "Direct invite table SELECT",
+      "expected": "No accessible invite code",
+      "actual": "No accessible rows",
+      "status": "PASS",
+      "errorCodes": [],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "5",
+      "actor": "B",
+      "operation": "Promote self",
+      "expected": "RPC rejects unauthorized action; memberships unchanged",
+      "actual": "Rejected; state re-read as A",
+      "status": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "6/commissioner",
+      "actor": "B",
+      "operation": "Set A role to commissioner",
+      "expected": "RPC rejects unauthorized action; memberships unchanged",
+      "actual": "Rejected; state re-read as A",
+      "status": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "6/member",
+      "actor": "B",
+      "operation": "Set A role to member",
+      "expected": "RPC rejects unauthorized action; memberships unchanged",
+      "actual": "Rejected; state re-read as A",
+      "status": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "7",
+      "actor": "A",
+      "operation": "Set B role to commissioner",
+      "expected": "Requested B role; A remains commissioner",
+      "actual": "Both roles verified",
+      "status": "PASS",
+      "errorCodes": [],
+      "protectedDataUnchanged": "not applicable"
+    },
+    {
+      "id": "8",
+      "actor": "A",
+      "operation": "Set B role to member",
+      "expected": "Requested B role; A remains commissioner",
+      "actual": "Both roles verified",
+      "status": "PASS",
+      "errorCodes": [],
+      "protectedDataUnchanged": "not applicable"
+    },
+    {
+      "id": "9",
+      "actor": "A",
+      "operation": "Demote sole commissioner A",
+      "expected": "RPC rejects unauthorized action; memberships unchanged",
+      "actual": "Rejected; state re-read as A",
+      "status": "PASS",
+      "errorCodes": [
+        "23514"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "10",
+      "actor": "A",
+      "operation": "Sole commissioner leaves",
+      "expected": "RPC rejects unauthorized action; memberships unchanged",
+      "actual": "Rejected; state re-read as A",
+      "status": "PASS",
+      "errorCodes": [
+        "23514"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "11",
+      "actor": "B",
+      "operation": "Ordinary member leaves",
+      "expected": "B absent; A still commissioner",
+      "actual": "Memberships inspected",
+      "status": "PASS",
+      "errorCodes": [],
+      "protectedDataUnchanged": "not applicable"
+    },
+    {
+      "id": "12",
+      "actor": "A",
+      "operation": "Remove ordinary member B",
+      "expected": "B absent; A remains commissioner",
+      "actual": "Memberships inspected",
+      "status": "PASS",
+      "errorCodes": [],
+      "protectedDataUnchanged": "not applicable"
+    },
+    {
+      "id": "13",
+      "actor": "B",
+      "operation": "Remove ordinary member C",
+      "expected": "RPC rejects unauthorized action; memberships unchanged",
+      "actual": "Rejected; state re-read as A",
+      "status": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "G/F",
+      "actor": "A",
+      "operation": "Regenerate invite and read stored value",
+      "expected": "Different code, valid format, RPC matches stored value",
+      "actual": "Compared without disclosing codes",
+      "status": "PASS",
+      "errorCodes": [],
+      "protectedDataUnchanged": "not applicable"
+    },
+    {
+      "id": "14",
+      "actor": "C",
+      "operation": "Join with old invite after regeneration",
+      "expected": "Rejected; C remains outside League 1",
+      "actual": "Old invite rejected; membership unchanged",
+      "status": "PASS",
+      "errorCodes": [
+        "22023"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "15",
+      "actor": "C",
+      "operation": "Join with new invite",
+      "expected": "New ordinary membership; League 2 commissioner preserved",
+      "actual": "Both league roles inspected",
+      "status": "PASS",
+      "errorCodes": [],
+      "protectedDataUnchanged": "not applicable"
+    },
+    {
+      "id": "16",
+      "actor": "B",
+      "operation": "Repeat join while already a member",
+      "expected": "already_member true; exactly one B row; no state change",
+      "actual": "Returned flag and membership row count inspected",
+      "status": "PASS",
+      "errorCodes": [],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "17/A",
+      "actor": "A",
+      "operation": "SELECT League 2 memberships",
+      "expected": "Zero accessible rows",
+      "actual": "Zero accessible rows",
+      "status": "PASS",
+      "errorCodes": [],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "17/B",
+      "actor": "B",
+      "operation": "SELECT League 2 memberships",
+      "expected": "Zero accessible rows",
+      "actual": "Zero accessible rows",
+      "status": "PASS",
+      "errorCodes": [],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "C/A/leagues/insert",
+      "actor": "A",
+      "operation": "Direct insert on leagues",
+      "expected": "Permission denial or zero changed rows; protected data unchanged",
+      "actual": "Database denied write",
+      "status": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "C/A/leagues/update",
+      "actor": "A",
+      "operation": "Direct update on leagues",
+      "expected": "Permission denial or zero changed rows; protected data unchanged",
+      "actual": "Database denied write",
+      "status": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "C/A/leagues/delete",
+      "actor": "A",
+      "operation": "Direct delete on leagues",
+      "expected": "Permission denial or zero changed rows; protected data unchanged",
+      "actual": "Database denied write",
+      "status": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "C/A/league_members/insert",
+      "actor": "A",
+      "operation": "Direct insert on league_members",
+      "expected": "Permission denial or zero changed rows; protected data unchanged",
+      "actual": "Database denied write",
+      "status": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "C/A/league_members/update",
+      "actor": "A",
+      "operation": "Direct update on league_members",
+      "expected": "Permission denial or zero changed rows; protected data unchanged",
+      "actual": "Database denied write",
+      "status": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "C/A/league_members/delete",
+      "actor": "A",
+      "operation": "Direct delete on league_members",
+      "expected": "Permission denial or zero changed rows; protected data unchanged",
+      "actual": "Database denied write",
+      "status": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "C/A/league_invite_codes/insert",
+      "actor": "A",
+      "operation": "Direct insert on league_invite_codes",
+      "expected": "Permission denial or zero changed rows; protected data unchanged",
+      "actual": "Database denied write",
+      "status": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "C/A/league_invite_codes/update",
+      "actor": "A",
+      "operation": "Direct update on league_invite_codes",
+      "expected": "Permission denial or zero changed rows; protected data unchanged",
+      "actual": "Database denied write",
+      "status": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "C/A/league_invite_codes/delete",
+      "actor": "A",
+      "operation": "Direct delete on league_invite_codes",
+      "expected": "Permission denial or zero changed rows; protected data unchanged",
+      "actual": "Database denied write",
+      "status": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "C/B/leagues/insert",
+      "actor": "B",
+      "operation": "Direct insert on leagues",
+      "expected": "Permission denial or zero changed rows; protected data unchanged",
+      "actual": "Database denied write",
+      "status": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "C/B/leagues/update",
+      "actor": "B",
+      "operation": "Direct update on leagues",
+      "expected": "Permission denial or zero changed rows; protected data unchanged",
+      "actual": "Database denied write",
+      "status": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "C/B/leagues/delete",
+      "actor": "B",
+      "operation": "Direct delete on leagues",
+      "expected": "Permission denial or zero changed rows; protected data unchanged",
+      "actual": "Database denied write",
+      "status": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "C/B/league_members/insert",
+      "actor": "B",
+      "operation": "Direct insert on league_members",
+      "expected": "Permission denial or zero changed rows; protected data unchanged",
+      "actual": "Database denied write",
+      "status": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "C/B/league_members/update",
+      "actor": "B",
+      "operation": "Direct update on league_members",
+      "expected": "Permission denial or zero changed rows; protected data unchanged",
+      "actual": "Database denied write",
+      "status": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "C/B/league_members/delete",
+      "actor": "B",
+      "operation": "Direct delete on league_members",
+      "expected": "Permission denial or zero changed rows; protected data unchanged",
+      "actual": "Database denied write",
+      "status": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "C/B/league_invite_codes/insert",
+      "actor": "B",
+      "operation": "Direct insert on league_invite_codes",
+      "expected": "Permission denial or zero changed rows; protected data unchanged",
+      "actual": "Database denied write",
+      "status": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "C/B/league_invite_codes/update",
+      "actor": "B",
+      "operation": "Direct update on league_invite_codes",
+      "expected": "Permission denial or zero changed rows; protected data unchanged",
+      "actual": "Database denied write",
+      "status": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "C/B/league_invite_codes/delete",
+      "actor": "B",
+      "operation": "Direct delete on league_invite_codes",
+      "expected": "Permission denial or zero changed rows; protected data unchanged",
+      "actual": "Database denied write",
+      "status": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "D",
+      "actor": "B",
+      "operation": "Direct commissioner-only regenerate RPC",
+      "expected": "Rejected; invite and memberships unchanged",
+      "actual": "Database rejected ordinary member",
+      "status": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "E",
+      "actor": "A",
+      "operation": "Final commissioner state after all attempted role/leave/write operations",
+      "expected": "A remains sole commissioner",
+      "actual": "Exactly one commissioner, A",
+      "status": "PASS",
+      "errorCodes": [],
+      "protectedDataUnchanged": "not applicable"
+    },
+    {
+      "id": "supplement/malformed",
+      "actor": "B",
+      "operation": "Join with malformed invite",
+      "expected": "22023 rejection; no membership change",
+      "actual": "Rejected; state verified",
+      "status": "PASS",
+      "errorCodes": [
+        "22023"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "supplement/unknown",
+      "actor": "B",
+      "operation": "Join with unknown invite",
+      "expected": "22023 rejection; no membership change",
+      "actual": "Rejected; state verified",
+      "status": "PASS",
+      "errorCodes": [
+        "22023"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "18/leagues",
+      "actor": "Anonymous",
+      "operation": "SELECT leagues",
+      "expected": "No rows exposed",
+      "actual": "Permission denied",
+      "status": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "18/league_members",
+      "actor": "Anonymous",
+      "operation": "SELECT league_members",
+      "expected": "No rows exposed",
+      "actual": "Permission denied",
+      "status": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    }
+  ],
+  "finishedAt": "2026-10-05T19:46:43.823Z"
+}

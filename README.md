@@ -8,7 +8,7 @@ A web application foundation for creating and managing fantasy wrestling leagues
 - TypeScript with strict checking
 - Tailwind CSS
 - Supabase PostgreSQL and email/password authentication
-- Vercel deployment and GitHub version control
+- GitHub version control; Vercel is the planned hosting target (no production deployment)
 
 ## Local setup
 
@@ -37,7 +37,7 @@ Never put a Supabase secret/service-role key in a `NEXT_PUBLIC_` variable or exp
 - `src/lib/auth-routes.ts` validates authentication return paths.
 - `src/lib/leagues` contains league validation and RLS-filtered reads.
 - `src/types` contains shared TypeScript contracts.
-- `supabase/migrations` contains SQL schema migrations awaiting their initial Git commit.
+- `supabase/migrations` contains immutable historical migrations and additive schema repairs.
 - `docs` records confirmed product rules and architecture boundaries.
 
 League implementation is present. Wrestler, draft, and scoring modules remain future work; gameplay routes currently display placeholders.
@@ -45,8 +45,8 @@ League implementation is present. Wrestler, draft, and scoring modules remain fu
 ## Current milestone
 
 - Milestone 1: application foundation complete.
-- Milestone 2: authentication/profiles implemented and previously manually verified against hosted development. Signup/login worked; the profile migration was applied. User B could update their own username, could not update User A, could read User A's public username, and anonymous access could not read profiles.
-- Milestone 3: leagues, memberships, commissioner operations, invite-code joining, and league selection implemented locally. Hosted migration application is unconfirmed; migration review and hosted RLS verification remain pending. Do not assume the hosted database contains league objects.
+- Milestone 2: authentication/profiles complete and hosted-verified in development. Signup/login worked; the profile migration was applied. User B could update their own username, could not update User A, could read User A's public username, and anonymous access could not read profiles.
+- Milestone 3: complete and hosted-verified. All 18 hosted development authorization checks and additional checks A–G passed on fresh fixtures using ordinary sessions and the public key. See [the retest report](docs/MILESTONE_3_HOSTED_RETEST.md). The earlier failed join run remains documented separately.
 - Milestone 4: not started.
 
-This recovery changes local files only. Review the corrected league migration before any hosted work. Migration files are present locally but are not yet committed. Fantasy teams, wrestler data, drafts, rosters, schedules, matchups, scoring, free agency, standings, postseason, and wrestling-data ingestion are not implemented. See [Product Rules](docs/PRODUCT_RULES.md), [Architecture](docs/ARCHITECTURE.md), [hosted development setup](docs/SUPABASE_DEVELOPMENT.md), and [league verification plan](docs/LEAGUE_RLS_VERIFICATION.md).
+Both repair migrations, `202610050001_fix_league_migration.sql` and `202610050002_fix_join_league_conflict.sql`, are applied to DEVELOPMENT. Production deployment has not occurred. Applied migrations remain immutable. Hosted verification created disposable development fixtures through ordinary application boundaries; no migration or security changes were made during testing. Fantasy teams, wrestler data, drafts, rosters, schedules, matchups, scoring, free agency, standings, postseason, and wrestling-data ingestion are not implemented. See [Product Rules](docs/PRODUCT_RULES.md), [Architecture](docs/ARCHITECTURE.md), [hosted development setup](docs/SUPABASE_DEVELOPMENT.md), and [league verification plan](docs/LEAGUE_RLS_VERIFICATION.md).

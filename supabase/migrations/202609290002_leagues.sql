@@ -5,7 +5,7 @@ grant usage on schema private to authenticated;
 create table public.leagues (
   id uuid primary key default pg_catalog.gen_random_uuid(),
   name text not null,
-  created_by uuid references auth.users (id) on delete set null,
+  created_by uuid not null references auth.users (id) on delete restrict,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   constraint leagues_name_length check (char_length(name) between 3 and 50),
@@ -101,12 +101,10 @@ as $$
     select pg_catalog.replace(pg_catalog.gen_random_uuid()::text, '-', '') as value
   )
   select pg_catalog.translate(
-    -- Select 20 random hex digits (80 bits), skipping UUID version position 13
-    -- and variant position 17. UUID text uses lowercase hexadecimal.
     pg_catalog.substr(value, 1, 12)
       || pg_catalog.substr(value, 14, 3)
       || pg_catalog.substr(value, 18, 5),
-    '0123456789abcdef',
+    '0123456789ABCDEF',
     'ABCDEFGHJKLMNPQR'
   ) from random_uuid;
 $$;

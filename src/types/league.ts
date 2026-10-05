@@ -18,7 +18,7 @@ export type LeagueMember = Readonly<{
 export type LeagueRecord = Readonly<{
   id: string;
   name: string;
-  created_by: string;
+  created_by: string | null;
   created_at: string;
   updated_at: string;
 }>;

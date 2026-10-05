@@ -1,0 +1,78 @@
+{
+  "testedAt": "2026-10-05T19:34:11.478Z",
+  "boundary": "ordinary sessions and public key",
+  "results": [
+    {
+      "id": "1",
+      "actor": "A",
+      "operation": "create_league RPC",
+      "expected": "One league with A as sole commissioner",
+      "actual": "One member, role commissioner",
+      "result": "PASS",
+      "errorCodes": [],
+      "protectedDataUnchanged": "not applicable"
+    },
+    {
+      "id": "F",
+      "actor": "A/C",
+      "operation": "Read fixture invite codes as commissioners",
+      "expected": "Both match uppercase 20-character constraint",
+      "actual": "Format checked without disclosing codes",
+      "result": "PASS",
+      "errorCodes": [],
+      "protectedDataUnchanged": "not applicable"
+    },
+    {
+      "id": "3/A",
+      "actor": "C",
+      "operation": "SELECT League 1 by known UUID",
+      "expected": "No visible league and no membership added",
+      "actual": "0 visible rows",
+      "result": "PASS",
+      "errorCodes": [],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "2",
+      "actor": "B",
+      "operation": "join_league with valid current invite",
+      "expected": "B becomes ordinary member",
+      "actual": "RPC rejected valid invite",
+      "result": "FAIL",
+      "errorCodes": [
+        "42702"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "STOP",
+      "result": "BLOCKED",
+      "actual": "verification_failed",
+      "errorCode": null
+    },
+    {
+      "id": "18/leagues",
+      "actor": "Anonymous",
+      "operation": "SELECT leagues",
+      "expected": "No rows exposed",
+      "actual": "Permission denied",
+      "result": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    },
+    {
+      "id": "18/league_members",
+      "actor": "Anonymous",
+      "operation": "SELECT league_members",
+      "expected": "No rows exposed",
+      "actual": "Permission denied",
+      "result": "PASS",
+      "errorCodes": [
+        "42501"
+      ],
+      "protectedDataUnchanged": true
+    }
+  ]
+}

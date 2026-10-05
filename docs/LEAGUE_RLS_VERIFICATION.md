@@ -1,8 +1,8 @@
 # Milestone 3 Hosted Development Verification
 
-Status: pending. Milestone 3 is implemented locally, but hosted league migration application is unconfirmed. Review the corrected migration before later authorized hosted work; this plan was not executed during recovery.
+Status: Milestone 3 COMPLETE and HOSTED-VERIFIED. PASS on the 2026-10-05 clean-state hosted development retest. All 18 required tests and additional checks A–G passed using ordinary sessions and the public key. See [the retest report](MILESTONE_3_HOSTED_RETEST.md) for per-operation evidence and scope. The earlier 42702 failure remains recorded in [the original results](MILESTONE_3_HOSTED_RESULTS.md). Do not rerun applied migrations. Both repair migrations are applied to DEVELOPMENT. Milestone 4 has not started; production deployment has not occurred.
 
-This plan is for the hosted **development** project only, after reviewing and applying `202609290002_leagues.sql` there. Never use SQL Editor/service-role access to simulate user behavior. Use User A, User B, and User C's normal email/password sessions through the application or short-lived local test UI that uses the public publishable key and each user's ordinary session. Do not print, persist, or share access/refresh tokens. Remove any temporary test UI after verification; do not add a production route or permanent bypass.
+This plan is for the hosted **development** project only, after the original `202609290002_leagues.sql` and subsequent `202610050001_fix_league_migration.sql` repair and `202610050002_fix_join_league_conflict.sql` join repair have been applied there in order. Never use SQL Editor/service-role access to simulate user behavior. Use User A, User B, and User C's normal email/password sessions through the application or short-lived local test UI that uses the public publishable key and each user's ordinary session. Do not print, persist, or share access/refresh tokens. Remove any temporary test UI after verification; do not add a production route or permanent bypass.
 
 ## Setup
 

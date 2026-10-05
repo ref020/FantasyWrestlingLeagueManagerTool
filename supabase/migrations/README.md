@@ -1,10 +1,14 @@
 # Database migrations
 
-SQL migration files are present locally and awaiting their initial Git commit.
+Applied hosted/shared migrations are immutable. Future changes require additive migrations.
 
-- `202609290001_profiles.sql`: profiles, Auth-user trigger, and profile RLS. Previously applied to hosted development; signup/login and two-user/anonymous profile RLS checks passed. Do not reapply to that project.
-- `202609290002_leagues.sql`: leagues, memberships, invite codes, authorization functions, and commissioner safeguards. Implemented locally; hosted application is unconfirmed and hosted RLS verification remains pending. The invite generator now translates lowercase UUID hexadecimal into the existing 16-character alphabet while preserving 80 random bits.
+All four migrations are applied to DEVELOPMENT, in order:
 
-Milestone 1 is complete; Milestone 2 is implemented and previously hosted-verified; Milestone 3 awaits hosted migration review/verification; Milestone 4 has not started.
+1. `202609290001_profiles.sql`: historical profiles and profile RLS.
+2. `202609290002_leagues.sql`: historical league schema, preserving the deployed uppercase invite-generator bug, NOT NULL / ON DELETE RESTRICT creator FK, and ambiguous join conflict clause.
+3. `202610050001_fix_league_migration.sql`: additive repair for invite generation and nullable / ON DELETE SET NULL creator metadata.
+4. `202610050002_fix_join_league_conflict.sql`: additive join repair using ON CONFLICT DO NOTHING. The membership primary key is the known schema's only unique constraint; review this behavior if later constraints change.
 
-Review the corrected league migration before hosted work. During later authorized development setup, inspect the existing schema before applying it: this migration is not an idempotent repair script. Do not assume it was never applied and rerun it blindly. Follow [the development procedure](../../docs/SUPABASE_DEVELOPMENT.md). No hosted database changes or league RLS checks were performed during recovery. Do not apply these migrations to production as part of this milestone.
+Do not edit or rerun applied migrations against existing development. A fresh database requires all migrations in timestamp order.
+
+Milestone 1 is complete. Milestones 2 and 3 are complete and hosted-verified. All 18 league authorization tests and checks A-G passed; see [the retest](../../docs/MILESTONE_3_HOSTED_RETEST.md). The [earlier 42702 failure](../../docs/MILESTONE_3_HOSTED_RESULTS.md) remains preserved. Milestone 4 has not started and production deployment has not occurred.

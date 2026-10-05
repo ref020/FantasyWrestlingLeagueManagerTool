@@ -1,28 +1,27 @@
 # Hosted Supabase Development Setup
 
-This repository uses a hosted Supabase **development** project. Docker and local Supabase are not used. Milestone 1 is complete. Milestone 2 is implemented and was previously manually verified in this hosted development project; the profiles migration was applied and signup/login worked. Previous profile RLS checks passed:
+Milestone 1 is complete. Milestones 2 and 3 are complete and hosted-verified in DEVELOPMENT. Milestone 4 has not started. Production deployment has not occurred. This project uses hosted development Supabase, not Docker/local Supabase.
 
-- User B could update their own username.
-- User B could not update User A.
-- User B could read User A's public username.
-- Anonymous access could not read profiles.
+Milestone 2 signup/login and profile RLS passed: User B could update their own username, could not update User A, could read A's public username, and anonymous access could not read profiles.
 
-These are user-reported results from prior development, not new verification during recovery. Milestone 3 is implemented locally, but league migration application is unconfirmed and hosted RLS verification remains pending. Milestone 4 has not started. This recovery makes no hosted changes and does not run the 18-check league verification plan.
+Milestone 3 passed all 18 authorization tests and additional checks A-G using ordinary sessions and the public key on fresh fixtures. The earlier join failure (42702) is preserved in [the original report](MILESTONE_3_HOSTED_RESULTS.md); the subsequent [successful retest](MILESTONE_3_HOSTED_RETEST.md) records its resolution. No new application or security defect was found.
 
-Review the corrected league migration first. The following procedures are for later authorized hosted work. Inspect the existing development schema before applying anything; do not assume league objects are present or absent.
+## Applied migration history
 
-## Review and apply the Milestone 3 migration
+All four migrations are applied to DEVELOPMENT in this order:
 
-After reviewing [202609290002_leagues.sql](../supabase/migrations/202609290002_leagues.sql), apply it only to the hosted development project, and only after [the profile migration](../supabase/migrations/202609290001_profiles.sql) has already been applied there:
+1. `202609290001_profiles.sql`
+2. `202609290002_leagues.sql`
+3. `202610050001_fix_league_migration.sql`
+4. `202610050002_fix_join_league_conflict.sql`
 
-1. Open the Supabase Dashboard and select the project explicitly designated for development. Verify its project reference; do not select production.
-2. In that development project's SQL Editor, create a new query.
-3. Copy the complete contents of `supabase/migrations/202609290002_leagues.sql` into the editor. Review that it is the leagues migration and verify the selected project once more.
-4. Run it once. Confirm it completes without errors. If anything fails or already exists, stop and inspect the development database rather than editing production or improvising SQL.
-5. In **Settings > API > Exposed schemas**, verify `private` is not exposed. Keep application access through the `public` RPCs and RLS-protected tables only.
-6. Verify the resulting tables, policies, and public functions in Table Editor/SQL Editor. The league verification plan documents the required User A/B/C test sequence; it remains pending.
+The original league migration retains its deployed defects. The first additive repair fixes the invite alphabet and changes creator metadata to nullable / ON DELETE SET NULL. The second fixes the join conflict clause while retaining authentication, locking, invite rechecking, idempotency, and restricted privileges.
 
-Do not run this migration against a production project. The SQL Editor executes with privileged database access; it is only for applying this reviewed migration, not for proving user RLS behavior.
+Once applied to a hosted/shared database, a migration is immutable. Do not rerun these migrations against existing development. Future schema changes require additive migrations. For a fresh development project only, apply all four in timestamp order before exercising league operations.
+
+The join repair uses ON CONFLICT DO NOTHING; the known membership schema has only the composite primary key as a unique constraint. Review this choice if future migrations add other unique/exclusion constraints. Source-contract unit tests do not execute PostgreSQL; hosted evidence is recorded separately.
+
+The setup instructions below are reference procedures for a fresh development environment, not instructions to reconfigure the verified project. No hosted changes are part of this checkpoint.
 
 ## Apply the profile migration
 
@@ -45,7 +44,7 @@ The existing development project already has this migration; do not rerun it. Fo
      and event_object_table in ('users', 'profiles');
    ```
 
-The migration creates `public.profiles` keyed by `auth.users.id` with cascading delete, a lowercase unique username constraint/index, RLS grants/policies, an Auth-user profile-creation trigger, and an `updated_at` trigger. The migration file is the local record of these changes and awaits its initial Git commit. If execution fails partway or reports that objects already exist, stop and inspect the development database before retrying; do not improvise changes in production.
+The migration creates `public.profiles` keyed by `auth.users.id` with cascading delete, a lowercase unique username constraint/index, RLS grants/policies, an Auth-user profile-creation trigger, and an `updated_at` trigger. The migration file is the immutable historical record of these changes. If execution fails partway or reports that objects already exist, stop and inspect the development database before retrying; do not improvise changes in production.
 
 ## Configure email confirmation redirects
 
