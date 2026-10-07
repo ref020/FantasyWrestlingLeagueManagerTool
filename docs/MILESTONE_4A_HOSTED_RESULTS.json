@@ -1,0 +1,401 @@
+{
+  "startedAt": "2026-10-07T19:55:25.374Z",
+  "target": "DEVELOPMENT (reference matched locally)",
+  "method": "Public key; ordinary A/B/C sessions; no privileged SQL",
+  "results": [
+    {
+      "id": "1",
+      "actor": "A",
+      "description": "New league, commissioner, explicit season and application format",
+      "status": "PASS",
+      "detail": "Hosted new league and commissioner verified; actual application formatSeason returned 2026–27 (not browser testing).",
+      "errorCodes": []
+    },
+    {
+      "id": "2",
+      "actor": "A",
+      "description": "New league rejects missing/null/out-of-range/noninteger seasons",
+      "status": "PASS",
+      "detail": "Missing season denied 42501; NULL/out-of-range denied 22023; fractional/nonnumeric input denied 22P02. Visible league IDs unchanged across attempts.",
+      "errorCodes": [
+        "42501",
+        "22023",
+        "22P02"
+      ]
+    },
+    {
+      "id": "3",
+      "actor": "A",
+      "description": "Original one-argument create overload is not executable",
+      "status": "PASS",
+      "detail": "Authenticated call to original create_league(text) denied 42501. Same attempt included in test 2 state comparison.",
+      "errorCodes": [
+        "42501"
+      ]
+    },
+    {
+      "id": "4",
+      "actor": "A",
+      "description": "Pre-4A league retains unknown season",
+      "status": "PASS",
+      "detail": "Existing manual test league; historical failed/retest fixtures left unchanged. Application helper checked, not browser.",
+      "errorCodes": []
+    },
+    {
+      "id": "5",
+      "actor": "A",
+      "description": "Commissioner explicitly assigns legacy year",
+      "status": "PASS",
+      "detail": "Stored legacy year changed from NULL to 2026; memberships and invite code unchanged.",
+      "errorCodes": []
+    },
+    {
+      "id": "6",
+      "actor": "A",
+      "description": "Assigned season cannot change",
+      "status": "PASS",
+      "detail": "Rejected (22023, season_already_assigned); league, team and membership snapshot unchanged.",
+      "errorCodes": [
+        "22023"
+      ]
+    },
+    {
+      "id": "7",
+      "actor": "B",
+      "description": "Member settings mutation denied",
+      "status": "PASS",
+      "detail": "Rejected (42501, not_authorized); league, team and membership snapshot unchanged.",
+      "errorCodes": [
+        "42501"
+      ]
+    },
+    {
+      "id": "8",
+      "actor": "A/B",
+      "description": "Inactive league readable and grouped by application helper",
+      "status": "PASS",
+      "detail": "Hosted state/read verified; actual leaguesForView helper verified historical grouping, not browser rendering.",
+      "errorCodes": []
+    },
+    {
+      "id": "9",
+      "actor": "C",
+      "description": "Nonmember cannot read league by UUID",
+      "status": "PASS",
+      "detail": "C received zero league rows for known League 1 UUID.",
+      "errorCodes": []
+    },
+    {
+      "id": "10",
+      "actor": "B",
+      "description": "Member creates own normalized team",
+      "status": "PASS",
+      "detail": "Exactly one B-owned team in League 1; returned ID, league, owner and trimmed B League One name matched.",
+      "errorCodes": []
+    },
+    {
+      "id": "11",
+      "actor": "B",
+      "description": "Duplicate team rejected, original unchanged",
+      "status": "PASS",
+      "detail": "Rejected (23505, team_already_exists); league, team and membership snapshot unchanged.",
+      "errorCodes": [
+        "23505"
+      ]
+    },
+    {
+      "id": "12",
+      "actor": "B/C",
+      "description": "Same user owns independent teams in two leagues",
+      "status": "PASS",
+      "detail": "B legitimately joined League 2; B has exactly one independent team in each league.",
+      "errorCodes": []
+    },
+    {
+      "id": "13",
+      "actor": "C",
+      "description": "Nonmember team creation rejected",
+      "status": "PASS",
+      "detail": "Rejected (42501, not_authorized); league, team and membership snapshot unchanged.",
+      "errorCodes": [
+        "42501"
+      ]
+    },
+    {
+      "id": "14",
+      "actor": "B",
+      "description": "Owner renames own team",
+      "status": "PASS",
+      "detail": "B name updated; team ID, owner and created_at preserved.",
+      "errorCodes": []
+    },
+    {
+      "id": "15",
+      "actor": "B",
+      "description": "Member cannot target another owner through rename RPC",
+      "status": "PASS",
+      "detail": "RPC only renamed B; forged owner/team parameters rejected. Direct mutation paths covered by test 17; server-action forged fields covered by local tests.",
+      "errorCodes": [
+        "PGRST202"
+      ]
+    },
+    {
+      "id": "16",
+      "actor": "A",
+      "description": "Commissioner can rename own team but has no override",
+      "status": "PASS",
+      "detail": "A renamed A team; B team stayed identical. Forged owner parameter rejected.",
+      "errorCodes": [
+        "PGRST202"
+      ]
+    },
+    {
+      "id": "17",
+      "actor": "A/B",
+      "description": "Direct INSERT UPDATE DELETE denied under commissioner and member",
+      "status": "PASS",
+      "detail": "Six direct write attempts rejected; league/team/member snapshots unchanged after each.",
+      "errorCodes": [
+        "42501"
+      ]
+    },
+    {
+      "id": "18",
+      "actor": "A/B/C",
+      "description": "Team reads scoped to current members, including known UUID",
+      "status": "PASS",
+      "detail": "A and B each saw both League 1 teams; C saw zero by league or known team UUID.",
+      "errorCodes": []
+    },
+    {
+      "id": "19",
+      "actor": "Anonymous",
+      "description": "Anonymous team SELECT denied",
+      "status": "PASS",
+      "detail": "Anonymous SELECT denied 42501.",
+      "errorCodes": [
+        "42501"
+      ]
+    },
+    {
+      "id": "20",
+      "actor": "B/C",
+      "description": "Inactive league blocks creation for member without team",
+      "status": "PASS",
+      "detail": "C, commissioner/member with no team in inactive League 2, was rejected 22023; full protected snapshot unchanged.",
+      "errorCodes": [
+        "22023"
+      ]
+    },
+    {
+      "id": "21",
+      "actor": "B",
+      "description": "Inactive league blocks existing owner rename",
+      "status": "PASS",
+      "detail": "B rename rejected 22023 while inactive; protected snapshot unchanged. C then reactivated League 2.",
+      "errorCodes": [
+        "22023"
+      ]
+    },
+    {
+      "id": "22",
+      "actor": "B/A",
+      "description": "Team survives owner leaving",
+      "status": "PASS",
+      "detail": "B left through leave_league; A confirmed identical retained team and absent B membership. Removal variant was not separately exercised.",
+      "errorCodes": []
+    },
+    {
+      "id": "23",
+      "actor": "B",
+      "description": "Former owner loses team and league access",
+      "status": "PASS",
+      "detail": "B saw zero league/team rows after leaving; rename rejected 42501; A confirmed protected state unchanged.",
+      "errorCodes": [
+        "42501"
+      ]
+    },
+    {
+      "id": "24",
+      "actor": "B",
+      "description": "Rejoin restores original team without duplicate",
+      "status": "PASS",
+      "detail": "B rejoined with current invite; original ID/name/data restored to visibility. Duplicate create rejected 23505; owner count stayed one.",
+      "errorCodes": [
+        "23505"
+      ]
+    },
+    {
+      "id": "25",
+      "actor": "A",
+      "description": "League-1-only member cannot read League 2 teams",
+      "status": "PASS",
+      "detail": "A, member only of League 1 among new fixtures, saw zero League 2 teams.",
+      "errorCodes": []
+    },
+    {
+      "id": "26",
+      "actor": "A",
+      "description": "Unknown season blocks team creation before assignment",
+      "status": "PASS",
+      "detail": "Rejected (22023, season_required); league, team and membership snapshot unchanged.",
+      "errorCodes": [
+        "22023"
+      ]
+    },
+    {
+      "id": "27",
+      "actor": "B",
+      "description": "Name boundaries, trimming and forbidden values match application",
+      "status": "PASS",
+      "detail": "3/50 characters accepted; 2/51 rejected; ASCII spaces trimmed; @ and newline rejected with unchanged state.",
+      "errorCodes": [
+        "22023"
+      ]
+    },
+    {
+      "id": "28",
+      "actor": "Metadata review",
+      "status": "PASS",
+      "detail": "leagues_lineage_not_self: CHECK ((copied_from_league_id <> id))",
+      "description": "Lineage self-link constraint",
+      "evidence": "Structural review of hosted pg_constraint output supplied by user during this run; no DML or independent privileged query",
+      "errorCodes": []
+    },
+    {
+      "id": "29",
+      "actor": "Metadata review",
+      "status": "PASS",
+      "detail": "leagues_copied_from_league_id_fkey: FOREIGN KEY (copied_from_league_id) REFERENCES leagues(id) ON DELETE SET NULL",
+      "description": "Lineage source deletion preserves destination",
+      "evidence": "Structural review of hosted pg_constraint output supplied by user during this run; no DML or independent privileged query",
+      "errorCodes": []
+    },
+    {
+      "id": "30",
+      "actor": "Metadata review",
+      "status": "PASS",
+      "detail": "fantasy_teams_league_id_fkey: FOREIGN KEY (league_id) REFERENCES leagues(id) ON DELETE RESTRICT; fantasy_teams_owner_user_id_fkey: FOREIGN KEY (owner_user_id) REFERENCES auth.users(id) ON DELETE RESTRICT",
+      "description": "Team foreign keys preserve history",
+      "evidence": "Structural review of hosted pg_constraint output supplied by user during this run; no DML or independent privileged query",
+      "errorCodes": []
+    },
+    {
+      "id": "31",
+      "actor": "C",
+      "description": "Genuinely concurrent duplicate create on same user/league",
+      "status": "PASS",
+      "detail": "Two concurrent calls: one success, one 23505 duplicate; exactly one owner/league row.",
+      "errorCodes": [
+        "23505"
+      ]
+    },
+    {
+      "id": "A",
+      "actor": "A/B",
+      "description": "Direct league UPDATE cannot modify season_start_year",
+      "status": "PASS",
+      "detail": "A and B direct season UPDATE denied 42501; protected snapshots unchanged.",
+      "errorCodes": [
+        "42501"
+      ]
+    },
+    {
+      "id": "B",
+      "actor": "A/B",
+      "description": "Direct league UPDATE cannot modify is_active",
+      "status": "PASS",
+      "detail": "A and B direct activity UPDATE denied 42501; protected snapshots unchanged.",
+      "errorCodes": [
+        "42501"
+      ]
+    },
+    {
+      "id": "C",
+      "actor": "B",
+      "description": "Settings cannot grant role or mutate unrelated data",
+      "status": "PASS",
+      "detail": "Extra role/name/user parameters rejected PGRST202; protected league/team/member snapshots unchanged. Ordinary settings call denied in test 7.",
+      "errorCodes": [
+        "PGRST202"
+      ]
+    },
+    {
+      "id": "D",
+      "actor": "A/B",
+      "description": "Create RPC rejects caller-supplied owner identity",
+      "status": "PASS",
+      "detail": "Both sessions rejected supplied owner_user_id and p_owner_user_id with PGRST202; protected snapshots unchanged. Test 10 verifies actual derived owner.",
+      "errorCodes": [
+        "PGRST202"
+      ]
+    },
+    {
+      "id": "E",
+      "actor": "A/B",
+      "description": "Role changes preserve team ownership",
+      "status": "PASS",
+      "detail": "A promoted then demoted B through role RPC; requested membership role verified each time; all team rows unchanged.",
+      "errorCodes": []
+    },
+    {
+      "id": "F",
+      "actor": "Documentation",
+      "description": "Inactive limits documented without full archival promise",
+      "status": "PASS",
+      "detail": "Documentation/source review only; inactive freezes team mutations, broader archival restrictions deferred.",
+      "errorCodes": []
+    },
+    {
+      "id": "G",
+      "actor": "A/B",
+      "description": "No client lineage mutation/copy workflow",
+      "status": "PASS",
+      "detail": "Direct lineage update and extra RPC lineage parameters rejected; application source has no copy workflow.",
+      "errorCodes": [
+        "42501",
+        "PGRST202"
+      ]
+    }
+  ],
+  "fixtures": [
+    {
+      "label": "League 1",
+      "name": "4A League 1 1402925375",
+      "commissioner": "A"
+    },
+    {
+      "label": "League 2",
+      "name": "4A League 2 1402925375",
+      "commissioner": "C"
+    },
+    {
+      "label": "Legacy reused",
+      "name": "Milestone 3 Test League",
+      "commissioner": "A",
+      "change": "Explicit season assignment 2026; no membership/invite changes"
+    }
+  ],
+  "concurrency": {
+    "calls": 2,
+    "dispatch": "Promise.all without awaiting either call first",
+    "elapsedMs": 321,
+    "successes": 1,
+    "failures": 1,
+    "errorCodes": [
+      "23505"
+    ],
+    "finalOwnerLeagueRowCount": 1
+  },
+  "finishedAt": "2026-10-07T19:55:57.668Z",
+  "status": "PASS",
+  "scope": "31 required checks and A-G passed within stated evidence scope. Tests 28-30 use user-supplied hosted metadata; F is documentation review. Application formatting/grouping used actual local helpers on hosted data, not browser automation. No SQL security bypasses, migration changes or production access.",
+  "cleanup": "Temporary Node verification and report-assembly scripts removed after run; no application route installed. Ignored credential file remains local. Disposable fixtures remain.",
+  "localVerification": {
+    "lint": "PASS",
+    "typecheck": "PASS",
+    "tests": "PASS: 98 tests across 10 files",
+    "build": "PASS after sandbox EPERM worker spawn; permitted rerun succeeded",
+    "diffCheck": "PASS"
+  }
+}

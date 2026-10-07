@@ -1,13 +1,13 @@
 # Architecture
 
-Milestones 1-3 are complete; Milestones 2 and 3 are hosted-verified in DEVELOPMENT. Both additive repairs are applied. See [verification results](MILESTONE_3_HOSTED_RETEST.md). Milestone 4 has not started; production deployment has not occurred.
+Milestones 1-3 are complete; Milestones 2 and 3 are hosted-verified in DEVELOPMENT. Both additive repairs are applied. See [verification results](MILESTONE_3_HOSTED_RETEST.md). Milestone 4A is complete and hosted-verified in DEVELOPMENT (see [results and scope](MILESTONE_4A_HOSTED_RESULTS.md)); Milestone 4B has not started; production deployment has not occurred.
 
 ## Core boundary
 
 Real-world wrestling data and fantasy league data are separate concepts and should remain separate in storage, APIs, and application logic.
 
 - **Wrestling data** represents real participants, teams, weights, events, matches, and results. It may be supplied by manual commissioner entry, an external API, or a scraper/importer. Provider-specific acquisition and normalization belong at this boundary; the application must not depend on one provider's format.
-- **Fantasy league data** represents leagues, seasons, teams, rosters, drafts, lineup choices, fantasy matchups, scoring outcomes, standings, and audit history. It consumes normalized wrestling data but owns fantasy rules and league state.
+- **Fantasy league data** represents single-season leagues, teams, rosters, drafts, lineup choices, fantasy matchups, scoring outcomes, standings, and audit history. It consumes normalized wrestling data but owns fantasy rules and league state.
 
 Imported result corrections must preserve an auditable history. Ingestion providers should not write fantasy scoring outcomes directly; downstream domain logic will interpret normalized results according to league rules.
 
@@ -33,7 +33,7 @@ RLS is enabled on `public.profiles`. Anonymous access is revoked. Authenticated 
 
 ## Leagues, memberships, and authorization
 
-`public.leagues` stores a UUID identifier, display name, creator Auth ID, and timestamps. The deployed historical migration has `created_by NOT NULL` with `ON DELETE RESTRICT`. The applied first repair changes it to nullable with `ON DELETE SET NULL`, preserving existing values. Historical creator identity is metadata; active commissioner membership remains the authorization mechanism. The final-commissioner invariant is unchanged and can still prevent deletion of a user who is the sole commissioner. `public.league_members` uses `(league_id, user_id)` as its primary key and stores each user's `commissioner` or `member` role. Membership is league-scoped; no single league is stored on the profile, so one user can hold independent roles in many leagues. There are no fantasy-team rows in this milestone.
+`public.leagues` stores a UUID identifier, display name, creator Auth ID, and timestamps. The deployed historical migration has `created_by NOT NULL` with `ON DELETE RESTRICT`. The applied first repair changes it to nullable with `ON DELETE SET NULL`, preserving existing values. Historical creator identity is metadata; active commissioner membership remains the authorization mechanism. The final-commissioner invariant is unchanged and can still prevent deletion of a user who is the sole commissioner. `public.league_members` uses `(league_id, user_id)` as its primary key and stores each user's `commissioner` or `member` role. Membership is league-scoped; no single league is stored on the profile, so one user can hold independent roles in many leagues. Milestone 4A adds the separately user-owned fantasy_teams table; see the applied 4A schema below.
 
 Invite codes are held separately in `public.league_invite_codes`, not on `leagues`. Each code is generated inside the database from 80 random UUID bits and mapped to a 16-character alphabet that omits visually ambiguous symbols, yielding a 20-character code. The generator selects hexadecimal positions 1-12, 14-16, and 18-22, skipping the UUID version and variant positions (13 and 17). After the applied first repair, its lowercase source alphabet matches UUID text; a one-to-one mapping preserves 20 * 4 = 80 random bits. A unique constraint rejects duplicate codes. Joining requires an authenticated call to `join_league`; malformed, unknown, and regenerated/old codes return the same invalid-code outcome. Existing members receive an idempotent already-member result. Only commissioners can read the invite-code table or regenerate a code; ordinary league reads cannot accidentally disclose it.
 
@@ -47,8 +47,16 @@ League routes use UUIDs rather than display names: `/leagues/new`, `/leagues/joi
 
 ## Current scope
 
-Milestone 1 is complete. Milestone 2 is complete and hosted-verified, including signup/login and profile RLS checks. Milestone 3 is complete and hosted-verified: all 18 tests and checks A-G passed on fresh development fixtures. Both repair migrations (`202610050001` and `202610050002`) are applied to DEVELOPMENT. Milestone 4 has not started. Production deployment has not occurred.
+Milestone 1 is complete. Milestone 2 is complete and hosted-verified, including signup/login and profile RLS checks. Milestone 3 is complete and hosted-verified: all 18 tests and checks A-G passed on fresh development fixtures. Both repair migrations (`202610050001` and `202610050002`) are applied to DEVELOPMENT. Milestone 4A is complete and hosted-verified; the fifth migration is applied to DEVELOPMENT. Milestone 4B has not started. Production deployment has not occurred.
 
 The original league migration preserves its historical invite case bug, restrictive creator FK, and ambiguous join conflict clause. The applied additive repairs fix those defects. Applied migrations are immutable; do not edit or rerun them.
 
-Milestone 3 covers league creation/joining, membership, commissioner management, invite-code management, and league selection. Fantasy teams, wrestlers, drafts, rosters, schedules, matchups, scoring, free agency, postseason, and wrestling-data ingestion remain unimplemented. See [hosted results](MILESTONE_3_HOSTED_RETEST.md) and [development setup](SUPABASE_DEVELOPMENT.md).
+Milestone 3 covers league creation/joining, membership, commissioner management, invite-code management, and league selection. Wrestlers/schools, drafts, rosters, schedules, matchups, scoring, free agency, postseason, league copying, and wrestling-data ingestion remain unimplemented. See [hosted results](MILESTONE_3_HOSTED_RETEST.md) and [development setup](SUPABASE_DEVELOPMENT.md).
+
+## Milestone 4A (hosted-verified in DEVELOPMENT)
+
+One league equals one season, represented by season_start_year; there is no seasons table. Existing leagues retain unknown NULL seasons until a commissioner explicitly assigns a year. New leagues require a year. is_active separates active browsing from historical leagues without deleting data; only team create/rename are currently closed while inactive. Membership/invite RPC behavior remains unchanged.
+
+Teams belong directly to one league and one Auth user. UNIQUE (league_id, owner_user_id), RLS member-scoped reads, and authenticated create/rename RPCs enforce ownership and membership. Parent-league locks serialize these operations with membership/status changes. Removal or leave retains teams; current membership is still required for reads and renames. User/league RESTRICT foreign keys protect historical teams until deletion/transfer policy is decided. Commissioners have no ownership override.
+
+Nullable copied_from_league_id with SET NULL records future lineage only; no copy workflow exists. Weights are fixed system constants in the product rules; no weight data is needed by 4A code. Global wrestler/school data is reserved for 4B. See [the full model and rollout choices](MILESTONE_4A.md) and [hosted verification checklist](MILESTONE_4A_VERIFICATION.md). Existing handwritten database-facing contracts are extended locally; no hosted type generation is attempted during this implementation.

@@ -1,5 +1,21 @@
 # Product Rules
 
+## LEAGUES AND FANTASY TEAMS (MILESTONE 4A)
+- One league is exactly one wrestling season; season identity lives on the league, not a child seasons table.
+- Historical leagues remain distinct records and are viewable as inactive leagues by current members.
+- A user may join multiple leagues in the same season and own one independent team in each.
+- Each fantasy team has one league and one owning user; the database enforces at most one team per user per league.
+- Current membership is required to create or rename one's own team. Membership and ownership are distinct.
+- Commissioners may own teams, but neither receive one automatically nor have another owner's rename override.
+- Leaving/removal retains the team and ownership. Rejoining restores access; no automatic deletion or transfer.
+- Account deletion/anonymization and owner reassignment require a future product decision. Current team FKs preserve data with RESTRICT.
+- Future copying creates a NEW league UUID, copies appropriate settings, and invites previous team owners. It does not copy drafts, rosters, results, scores, standings, matchups, transactions, or playoff results.
+- Only nullable lineage is modeled in 4A; no copying or automatic invitations/memberships are implemented.
+- Wrestlers and schools will be global shared data in 4B. No wrestler/school data, drafting, rosters, or scoring is implemented in 4A.
+- See [the implementation decisions](MILESTONE_4A.md) for season backfill, inactivity, name validation, and retention boundaries.
+
+The remaining gameplay rules describe future milestones, not implemented 4A behavior.
+
 ## FANTASY WEEK
 - Week begins Monday.
 - Week ends Sunday.
@@ -8,7 +24,7 @@
 ## ROSTERS
 - One starting wrestler per weight class.
 - Four bench positions per fantasy team.
-- Weight classes must eventually be configurable rather than permanently hard-coded to NCAA men's weights.
+- The ten NCAA men's weights are fixed system-wide: 125, 133, 141, 149, 157, 165, 174, 184, 197, 285. They are not configurable per league or season.
 
 ## DUAL SCORING
 - Pin/fall = 6

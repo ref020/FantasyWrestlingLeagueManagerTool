@@ -5,10 +5,13 @@ import { PageHeading } from "@/components/ui/page-heading";
 import { getLeagueDetails } from "@/lib/leagues/queries";
 import { normalizeLeagueId } from "@/lib/leagues/validation";
 import { createClient } from "@/lib/supabase/server";
+import { formatSeason, leagueActivityLabel } from "@/lib/leagues/season";
+import { getMyFantasyTeam } from "@/lib/teams/queries";
+import { FantasyTeamPanel } from "@/components/leagues/fantasy-team-panel";
 
 export default async function LeaguePage({ params, searchParams }: {
   params: Promise<{ leagueId: string }>;
-  searchParams: Promise<{ notice?: string }>;
+  searchParams: Promise<{ notice?: string; error?: string }>;
 }) {
   const { leagueId: rawLeagueId } = await params;
   const leagueId = normalizeLeagueId(rawLeagueId);
@@ -20,13 +23,15 @@ export default async function LeaguePage({ params, searchParams }: {
 
   const details = await getLeagueDetails(leagueId, user.id);
   if (!details) notFound();
-  const { notice } = await searchParams;
+  const [{ notice, error }, teamResult] = await Promise.all([searchParams, getMyFantasyTeam(leagueId, user.id)]);
 
   return (
     <main className="mx-auto w-full max-w-6xl px-5 py-10 sm:px-8 sm:py-14">
       <PageHeading eyebrow="My Leagues" title={details.league.name} />
-      <LeagueFeedback notice={notice} />
+      <LeagueFeedback notice={notice} error={error} />
+      <p className="mt-3 text-sm text-[var(--muted)]">{formatSeason(details.league.season_start_year)} · {leagueActivityLabel(details.league.is_active)}</p>
       <p className="mt-3 text-sm font-semibold capitalize text-[var(--green)]">Your role: {details.currentRole}</p>
+      <FantasyTeamPanel league={details.league} {...teamResult} />
       <section className="mt-8 grid gap-8 border-t border-[var(--line)] pt-6 md:grid-cols-[1fr_0.7fr]">
         <div>
           <h2 className="text-lg font-bold">League members</h2>
@@ -47,7 +52,7 @@ export default async function LeaguePage({ params, searchParams }: {
             <li><Link href={`/leagues/${leagueId}/members`} className="font-semibold text-[var(--green)] underline">Members</Link></li>
             <li><Link href={`/leagues/${leagueId}/settings`} className="font-semibold text-[var(--green)] underline">Settings</Link></li>
           </ul>
-          <p className="mt-5 text-xs leading-5 text-[var(--muted)]">Teams, drafts, rosters, matchups, and scoring are not part of this milestone.</p>
+          <p className="mt-5 text-xs leading-5 text-[var(--muted)]">Drafts, rosters, matchups, and scoring are not available yet.</p>
         </nav>
       </section>
       <Link href="/dashboard" className="mt-8 inline-block text-sm font-semibold text-[var(--green)] underline">Back to My Leagues</Link>

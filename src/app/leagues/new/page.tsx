@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PageHeading } from "@/components/ui/page-heading";
 import { LeagueFeedback } from "@/components/leagues/league-feedback";
 import { createLeagueAction } from "@/app/leagues/actions";
+import { SeasonField } from "@/components/leagues/season-field";
 
 export default async function NewLeaguePage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   const { error } = await searchParams;
@@ -18,6 +19,7 @@ export default async function NewLeaguePage({ searchParams }: { searchParams: Pr
             <input id="name" name="name" required minLength={3} maxLength={50} className="mt-2 block w-full border border-[var(--line)] bg-white px-3 py-3 text-sm outline-none focus:border-[var(--green)] focus:ring-2 focus:ring-[var(--lime)]" />
           </label>
           <p className="text-xs leading-5 text-[var(--muted)]">3-50 characters. Letters, numbers, spaces, apostrophes, hyphens, and common punctuation are allowed.</p>
+          <SeasonField />
           <button type="submit" className="bg-[var(--green)] px-4 py-3 text-sm font-bold text-white hover:bg-[var(--green-dark)]">Create league</button>
         </form>
         <Link href="/dashboard" className="mt-6 inline-block text-sm font-semibold text-[var(--green)] underline">Back to My Leagues</Link>

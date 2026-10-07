@@ -14,7 +14,7 @@ export async function getMyLeagues(userId: string): Promise<LeagueSummary[] | nu
   const leagueIds = memberships.map((membership) => membership.league_id as string);
   const { data: leagues, error: leagueError } = await supabase
     .from("leagues")
-    .select("id, name")
+    .select("id, name, season_start_year, is_active")
     .in("id", leagueIds);
 
   if (leagueError) return null;
@@ -37,6 +37,8 @@ export async function getMyLeagues(userId: string): Promise<LeagueSummary[] | nu
   return leagues.map((league) => ({
     id: league.id as string,
     name: league.name as string,
+    season_start_year: league.season_start_year as number | null,
+    is_active: league.is_active as boolean,
     role: roles.get(league.id as string) ?? "member",
     memberCount: countError ? null : counts.get(league.id as string) ?? 0,
   }));
@@ -46,7 +48,7 @@ export async function getLeagueDetails(leagueId: string, userId: string) {
   const supabase = await createClient();
   const { data: leagueData, error: leagueError } = await supabase
     .from("leagues")
-    .select("id, name, created_by, created_at, updated_at")
+    .select("id, name, created_by, created_at, updated_at, season_start_year, is_active, copied_from_league_id")
     .eq("id", leagueId)
     .maybeSingle();
 

@@ -1,4 +1,11 @@
 const errors: Record<string, string> = {
+  invalid_season: "Enter a four-digit season starting year between 1900 and 9998 and a valid league status.",
+  season_already_assigned: "This league already has a season. Create a new league for a different season.",
+  league_inactive: "This league is inactive. Team changes are closed.",
+  season_required: "A commissioner must set the league's season first.",
+  invalid_team_name: "Team names must be 3–50 characters using English letters, numbers, spaces, and common punctuation.",
+  team_already_exists: "You already have a team in this league. You can rename it below.",
+  team_not_found: "You do not have a team in this league yet.",
   "invalid-name": "League names must be 3-50 characters and contain no control characters.",
   invalid: "The submitted information is invalid.",
   invite: "That invite code is invalid or no longer active.",
@@ -10,6 +17,8 @@ const errors: Record<string, string> = {
 };
 
 const notices: Record<string, string> = {
+  "team-saved": "Your team name was saved.",
+  "season-updated": "League season settings saved.",
   "already-member": "You were already a member; the league is open below.",
   "invite-regenerated": "The invite code was regenerated. The previous code is no longer valid.",
   "role-updated": "Member role updated.",

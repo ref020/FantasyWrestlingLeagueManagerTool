@@ -1,6 +1,6 @@
 # Hosted Supabase Development Setup
 
-Milestone 1 is complete. Milestones 2 and 3 are complete and hosted-verified in DEVELOPMENT. Milestone 4 has not started. Production deployment has not occurred. This project uses hosted development Supabase, not Docker/local Supabase.
+Milestone 1 is complete. Milestones 2, 3 and 4A are complete and hosted-verified in DEVELOPMENT. See the 4A hosted report for verification scope. Milestone 4B has not started. Production deployment has not occurred. This project uses hosted development Supabase, not Docker/local Supabase.
 
 Milestone 2 signup/login and profile RLS passed: User B could update their own username, could not update User A, could read A's public username, and anonymous access could not read profiles.
 
@@ -74,3 +74,7 @@ After applying the migration and configuring the redirect:
 These hosted checks require a working development project and accessible test email inbox and are not run automatically by the repository test suite.
 
 For the Milestone 3 user-isolation matrix, follow [LEAGUE_RLS_VERIFICATION.md](LEAGUE_RLS_VERIFICATION.md). It uses normal authenticated users and the public publishable key, never the service-role key.
+
+## Applied 4A DEVELOPMENT rollout
+
+The fifth migration, `202610070001_league_seasons_and_fantasy_teams.sql`, was applied to DEVELOPMENT by the user. Do not rerun or edit it. Existing leagues receive NULL season and active=true without rewriting membership/invites; commissioners must supply authoritative legacy seasons. The new application expects these columns and RPCs. New league creation now requires p_season_start_year; the legacy one-argument RPC is no longer executable by clients. Coordinate schema and UI rollout. Follow [the 4A verification checklist](MILESTONE_4A_VERIFICATION.md); all 31 final checks and A–G passed; see [hosted results and scope](MILESTONE_4A_HOSTED_RESULTS.md).

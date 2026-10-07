@@ -5,6 +5,8 @@ export type LeagueSummary = Readonly<{
   name: string;
   role: LeagueRole;
   memberCount: number | null;
+  season_start_year: number | null;
+  is_active: boolean;
 }>;
 
 export type LeagueMember = Readonly<{
@@ -19,6 +21,9 @@ export type LeagueRecord = Readonly<{
   id: string;
   name: string;
   created_by: string | null;
+  season_start_year: number | null;
+  is_active: boolean;
+  copied_from_league_id: string | null;
   created_at: string;
   updated_at: string;
 }>;
