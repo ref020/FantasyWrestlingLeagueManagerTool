@@ -1,5 +1,16 @@
 # Product Rules
 
+## GLOBAL CATALOG (MILESTONE 4B-1, HOSTED-VERIFIED IN DEVELOPMENT)
+
+Milestone 4B-2 has not started. Verification scope and the preserved SQLSTATE assertion discrepancy are documented in [the hosted report](MILESTONE_4B1_HOSTED_RESULTS.md).
+
+- NCAA Division I men's wrestling programs must be verified per season, including legitimate sport-specific multidivision classifications.
+- Officially rostered redshirts, freshmen, injured and noncompeting wrestlers qualify without recorded matches or a collegiate debut.
+- Only approved official roster evidence establishes season-pool eligibility. Unknown weight stays NULL and does not qualify for a specific draft weight slot.
+- Confirmed removal closes new-draft eligibility; source outages do not imply removal. Historical identities and roster revisions are retained.
+- Catalog writes are backend-only. Users and commissioners have no catalog mutation privileges.
+- No importer, real catalog data, draft or scoring workflow exists. See [4B-1 design](MILESTONE_4B1.md).
+
 ## LEAGUES AND FANTASY TEAMS (MILESTONE 4A)
 - One league is exactly one wrestling season; season identity lives on the league, not a child seasons table.
 - Historical leagues remain distinct records and are viewable as inactive leagues by current members.

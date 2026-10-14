@@ -1,6 +1,6 @@
 # Hosted Supabase Development Setup
 
-Milestone 1 is complete. Milestones 2, 3 and 4A are complete and hosted-verified in DEVELOPMENT. See the 4A hosted report for verification scope. Milestone 4B has not started. Production deployment has not occurred. This project uses hosted development Supabase, not Docker/local Supabase.
+Milestone 1 is complete. Milestones 2, 3 and 4A are complete and hosted-verified in DEVELOPMENT. See the 4A hosted report for verification scope. Milestone 4B-1 is complete and hosted-verified in DEVELOPMENT (see the hosted report for evidence scope and the resolved SQLSTATE assertion mismatch); Milestone 4B-2 has not started. Production deployment has not occurred. This project uses hosted development Supabase, not Docker/local Supabase.
 
 Milestone 2 signup/login and profile RLS passed: User B could update their own username, could not update User A, could read A's public username, and anonymous access could not read profiles.
 

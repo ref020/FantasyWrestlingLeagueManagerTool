@@ -1,0 +1,979 @@
+{
+  "status": "COMPLETE — HOSTED-VERIFIED WITH DOCUMENTED EVIDENCE SCOPE",
+  "migrationApplication": "User reports sixth migration successfully applied to DEVELOPMENT; metadata output pending.",
+  "results": [
+    {
+      "id": 1,
+      "description": "Seven tables exist",
+      "status": "PASS",
+      "evidenceType": "Hosted SQL metadata/constraint assistance",
+      "reason": "User-supplied SQL Editor fixture counts cover all seven tables (36 rows); API checks below independently exercise exposed relations."
+    },
+    {
+      "id": 2,
+      "description": "RLS enabled on all seven",
+      "status": "PASS",
+      "evidenceType": "User-supplied hosted SQL Editor metadata",
+      "reason": "All seven tables have rls_enabled=true, anon SELECT=false and authenticated INSERT/UPDATE/DELETE=false. Authenticated SELECT is true only on the four intended catalog read tables. Four SELECT-only authenticated policies match the intended identity, official evidence and parent visibility gates."
+    },
+    {
+      "id": 3,
+      "description": "Approved schools readable",
+      "status": "PASS",
+      "evidenceType": "Ordinary hosted session",
+      "reason": "User A SELECT returned precisely the two approved synthetic schools."
+    },
+    {
+      "id": 4,
+      "description": "Approved wrestlers readable",
+      "status": "PASS",
+      "evidenceType": "Ordinary hosted session",
+      "reason": "User A SELECT returned nine approved synthetic people."
+    },
+    {
+      "id": 5,
+      "description": "Verified DI programs readable",
+      "status": "PASS",
+      "evidenceType": "Ordinary hosted session",
+      "reason": "User A SELECT returned two verified D-I synthetic programs."
+    },
+    {
+      "id": 6,
+      "description": "Approved official affiliations readable",
+      "status": "PASS",
+      "evidenceType": "Ordinary hosted session",
+      "reason": "User A SELECT returned seven approved affiliations, including historical and removed records."
+    },
+    {
+      "id": 7,
+      "description": "Anonymous catalog reads denied",
+      "status": "PASS",
+      "evidenceType": "Ordinary hosted session",
+      "reason": "Anonymous SELECT denied on all seven: catalog_sources:42501, catalog_evidence:42501, catalog_external_identities:42501, wrestling_schools:42501, wrestlers:42501, wrestling_school_seasons:42501, wrestling_roster_affiliations:42501."
+    },
+    {
+      "id": 8,
+      "description": "Authenticated catalog writes denied",
+      "status": "PASS",
+      "evidenceType": "Ordinary hosted session",
+      "reason": "Users B and A each attempted INSERT, UPDATE, DELETE on all seven tables (42 requests); every request denied with 42501. Updates/deletes targeted only synthetic fixtures."
+    },
+    {
+      "id": 9,
+      "description": "Commissioner writes denied",
+      "status": "PASS",
+      "evidenceType": "Ordinary hosted session",
+      "reason": "User A has an existing commissioner membership; all 21 catalog write attempts denied with 42501."
+    },
+    {
+      "id": 10,
+      "description": "Backend provenance inaccessible",
+      "status": "PASS",
+      "evidenceType": "Ordinary hosted session",
+      "reason": "Authenticated SELECT on all three provenance tables denied with 42501."
+    },
+    {
+      "id": 11,
+      "description": "Unapproved identities hidden",
+      "status": "PASS",
+      "evidenceType": "Ordinary hosted session",
+      "reason": "Known existing unapproved school/person absent; approved positive controls visible."
+    },
+    {
+      "id": 12,
+      "description": "Unverified programs hidden",
+      "status": "PASS",
+      "evidenceType": "Ordinary hosted session",
+      "reason": "Known existing unverified 1901 program absent."
+    },
+    {
+      "id": 13,
+      "description": "Non-DI programs hidden",
+      "status": "PASS",
+      "evidenceType": "Ordinary hosted session",
+      "reason": "Known existing ineligible 1902 program absent."
+    },
+    {
+      "id": 14,
+      "description": "Unapproved affiliations hidden",
+      "status": "PASS",
+      "evidenceType": "Ordinary hosted session",
+      "reason": "Known unapproved rostered affiliation absent."
+    },
+    {
+      "id": 15,
+      "description": "Unverified roster claims hidden",
+      "status": "PASS",
+      "evidenceType": "Ordinary hosted session",
+      "reason": "Known unverified pending-official-evidence affiliation absent."
+    },
+    {
+      "id": 16,
+      "description": "Wrong evidence kind approval rejected",
+      "status": "PASS",
+      "evidenceType": "User-supplied hosted SQL Editor constraint execution; privileged, not ordinary authorization",
+      "reason": "pending official roster evidence: PASS (expected 23514; actual 23514); roster verification timestamp mismatch: PASS (expected 23514; actual 23514); wrong classification evidence kind: PASS (expected 23514; actual 23514); wrong roster evidence kind: PASS (expected 23514; actual 23514)"
+    },
+    {
+      "id": 17,
+      "description": "Nonofficial evidence approval rejected",
+      "status": "PASS",
+      "evidenceType": "User-supplied hosted SQL Editor constraint execution; privileged, not ordinary authorization",
+      "reason": "nonofficial classification evidence: PASS (expected 23514; actual 23514); nonofficial roster evidence: PASS (expected 23514; actual 23514)"
+    },
+    {
+      "id": 18,
+      "description": "Provider/evidence mismatch rejected",
+      "status": "PASS",
+      "evidenceType": "User-supplied hosted SQL Editor constraint execution; privileged, not ordinary authorization",
+      "reason": "provider evidence mismatch: PASS (expected 23503; actual 23503)"
+    },
+    {
+      "id": 19,
+      "description": "Duplicate provider identity rejected",
+      "status": "PASS",
+      "evidenceType": "User-supplied hosted SQL Editor constraint execution; privileged, not ordinary authorization",
+      "reason": "duplicate provider namespace key: PASS (expected 23505; actual 23505)"
+    },
+    {
+      "id": 20,
+      "description": "Same-name people remain distinct",
+      "status": "PASS",
+      "evidenceType": "Ordinary hosted session",
+      "reason": "Two identical-name wrestlers retain separate UUIDs and separate affiliations."
+    },
+    {
+      "id": 21,
+      "description": "Redshirt without matches pool eligible",
+      "status": "PASS",
+      "evidenceType": "Ordinary hosted read plus TypeScript rule",
+      "reason": "Exact application PostgREST pool query includes synthetic case; actual TypeScript eligibility helper agrees. No matches or health prerequisites; fabricated fixture labels are not real NCAA facts."
+    },
+    {
+      "id": 22,
+      "description": "Freshman without matches pool eligible",
+      "status": "PASS",
+      "evidenceType": "Ordinary hosted read plus TypeScript rule",
+      "reason": "Exact application PostgREST pool query includes synthetic case; actual TypeScript eligibility helper agrees. No matches or health prerequisites; fabricated fixture labels are not real NCAA facts."
+    },
+    {
+      "id": 23,
+      "description": "Injured rostered athlete pool eligible",
+      "status": "PASS",
+      "evidenceType": "Ordinary hosted read plus TypeScript rule",
+      "reason": "Exact application PostgREST pool query includes synthetic case; actual TypeScript eligibility helper agrees. No matches or health prerequisites; fabricated fixture labels are not real NCAA facts."
+    },
+    {
+      "id": 24,
+      "description": "NULL weight pool eligible but no slot",
+      "status": "PASS",
+      "evidenceType": "Ordinary hosted read plus TypeScript rule",
+      "reason": "Hosted pool includes NULL weight; actual TypeScript slot helper rejects every permitted weight."
+    },
+    {
+      "id": 25,
+      "description": "Superseded excluded from pool",
+      "status": "PASS",
+      "evidenceType": "Ordinary hosted read plus TypeScript rule",
+      "reason": "Affiliation is RLS-visible but excluded by hosted current-pool query and actual TypeScript eligibility helper."
+    },
+    {
+      "id": 26,
+      "description": "Removed excluded from pool",
+      "status": "PASS",
+      "evidenceType": "Ordinary hosted read plus TypeScript rule",
+      "reason": "Affiliation is RLS-visible but excluded by hosted current-pool query and actual TypeScript eligibility helper."
+    },
+    {
+      "id": 27,
+      "description": "Source outage preserves eligibility",
+      "status": "PASS",
+      "evidenceType": "Ordinary hosted read plus TypeScript rule",
+      "reason": "Persisted approved fixtures reference nonresolving example.invalid sources; hosted query still returns five without contacting sources. TypeScript helper ignores simulated sourceAvailable=false. No importer/outage job exists or was exercised."
+    },
+    {
+      "id": 28,
+      "description": "Transfer preserves identity/history",
+      "status": "PASS",
+      "evidenceType": "User-supplied hosted SQL Editor constraint execution; privileged, not ordinary authorization",
+      "reason": "transfer and return preserve identity/history: PASS (expected OK; actual OK)"
+    },
+    {
+      "id": 29,
+      "description": "Conflicting current approved claims rejected",
+      "status": "PASS",
+      "evidenceType": "User-supplied hosted SQL Editor constraint execution; privileged, not ordinary authorization",
+      "reason": "conflicting approved school: PASS (expected 23505; actual 23505); duplicate current same-school revision: PASS (expected 23505; actual 23505)"
+    },
+    {
+      "id": 30,
+      "description": "Affiliation history immutable",
+      "status": "PASS",
+      "evidenceType": "User-supplied hosted SQL Editor constraint execution; privileged, not ordinary authorization",
+      "reason": "closure predating verification: PASS (expected 23514; actual 23514); historical affiliation delete: PASS (expected 23514; actual 23514); historical affiliation reopen: PASS (expected 23514; actual 23514); historical affiliation rewrite: PASS (expected 23514; actual 23514)"
+    },
+    {
+      "id": 31,
+      "description": "Evidence immutable",
+      "status": "PASS",
+      "evidenceType": "User-supplied hosted SQL Editor constraint execution; privileged, not ordinary authorization",
+      "reason": "evidence delete: PASS (expected 23514; actual 23514); evidence rewrite: PASS (expected 23514; actual 23514)"
+    },
+    {
+      "id": 32,
+      "description": "Revision closure/replacement atomic",
+      "status": "PASS",
+      "evidenceType": "User-supplied hosted SQL Editor constraint execution; privileged, not ordinary authorization",
+      "reason": "failed replacement rolls closure back: PASS (expected 23514 and identical original row; actual 23514)"
+    },
+    {
+      "id": 33,
+      "description": "Source/provider FK integrity",
+      "status": "PASS",
+      "evidenceType": "User-supplied hosted SQL Editor constraint execution; privileged, not ordinary authorization",
+      "reason": "Requirement adjudicated PASS from hosted behavior plus supplied FK definitions: missing evidence/provider/wrestler/program references rejected with 23503; referenced provider deletion also rejected with 23503. Both source_id FKs explicitly specify ON DELETE RESTRICT; provider/evidence composite FK is present. Original raw assertion FAIL (expected 23001, actual 23503) is preserved in hostedConstraintRun and originalAssessment. No rerun or all-green raw script result is claimed.",
+      "originalAssessment": {
+        "status": "FAIL",
+        "reason": "missing evidence FK: PASS (expected 23503; actual 23503); missing provider FK: PASS (expected 23503; actual 23503); missing school season FK: PASS (expected 23503; actual 23503); missing wrestler FK: PASS (expected 23503; actual 23503); referenced provider delete: FAIL (expected 23001; actual 23503). Deletion was blocked; mismatch is in the expected SQLSTATE, not evidence of an allowed deletion. Original failure preserved pending metadata review."
+      }
+    },
+    {
+      "id": 34,
+      "description": "All ten weights allowed",
+      "status": "PASS",
+      "evidenceType": "User-supplied hosted SQL Editor constraint execution; privileged, not ordinary authorization",
+      "reason": "allowed weight 125: PASS (expected OK; actual OK); allowed weight 133: PASS (expected OK; actual OK); allowed weight 141: PASS (expected OK; actual OK); allowed weight 149: PASS (expected OK; actual OK); allowed weight 157: PASS (expected OK; actual OK); allowed weight 165: PASS (expected OK; actual OK); allowed weight 174: PASS (expected OK; actual OK); allowed weight 184: PASS (expected OK; actual OK); allowed weight 197: PASS (expected OK; actual OK); allowed weight 285: PASS (expected OK; actual OK)"
+    },
+    {
+      "id": 35,
+      "description": "Invalid weights rejected",
+      "status": "PASS",
+      "evidenceType": "User-supplied hosted SQL Editor constraint execution; privileged, not ordinary authorization",
+      "reason": "invalid weight -1: PASS (expected 23514; actual 23514); invalid weight 0: PASS (expected 23514; actual 23514); invalid weight 126: PASS (expected 23514; actual 23514); invalid weight 286: PASS (expected 23514; actual 23514)"
+    },
+    {
+      "id": 36,
+      "description": "League/team regression",
+      "status": "PASS",
+      "evidenceType": "Ordinary hosted session",
+      "reason": "Focused hosted regression using existing 4A fixtures: three_distinct_ordinary_users, nonmember_league_hidden, nonmember_teams_hidden, member_team_read, nonmember_team_create_42501, duplicate_team_23505, nonmember_rename_42501, member_settings_42501, legacy_create_42501, invalid_season_22023, direct_team_write_42501, denied_mutations_preserved_team_snapshot, repeat_join_success_no_42702, owner_same_name_rename_success, team_identity_name_owner_preserved. Owner rename submitted the existing name; only updated_at may change. No new league/team created. This is not a rerun of the full 4A suite."
+    },
+    {
+      "id": 37,
+      "description": "Migration history unchanged",
+      "status": "PASS",
+      "evidenceType": "Local Git history comparison; not hosted migration-ledger inspection",
+      "reason": "git diff --exit-code HEAD for all five previously applied migrations returned 0. Catalog migration was not edited during this verification pass. User reports sixth migration applied; hosted migration bookkeeping was not independently inspected."
+    },
+    {
+      "id": 38,
+      "description": "No public catalog-write RPC",
+      "status": "PASS",
+      "evidenceType": "User-supplied hosted function inventory, definition and event-trigger metadata",
+      "reason": "No catalog-write RPC in supplied public/private function inventory. public.rls_auto_enable returns event_trigger and is bound to enabled ensure_rls at ddl_command_end for CREATE TABLE, CREATE TABLE AS and SELECT INTO. Its body enables RLS on created public tables; it is not an ordinary catalog-write RPC. No function invocation or grant changes performed."
+    },
+    {
+      "id": 39,
+      "description": "Private predicate no provenance exposure",
+      "status": "PASS",
+      "evidenceType": "Ordinary hosted session",
+      "reason": "Private-schema RPC denied (PGRST106); public RPC absent (PGRST202); direct provenance SELECT denied in test 10. Does not claim the private boolean function has no SQL-level boolean oracle. User-supplied metadata also confirms catalog predicate owner postgres, empty search_path, anon EXECUTE false and authenticated EXECUTE true; catalog trigger functions have no anon/authenticated EXECUTE."
+    },
+    {
+      "id": 40,
+      "description": "Cross-league global catalog isolation",
+      "status": "PASS",
+      "evidenceType": "Ordinary hosted session",
+      "reason": "A and C have distinct league membership sets; A/B/C read the same five global pool rows. Catalog writes denied separately in tests 8–9."
+    }
+  ],
+  "fixturePreparation": "User confirms approved SQL executed in DEVELOPMENT: 2 sources, 6 evidence, 3 schools, 10 wrestlers, 5 programs, 9 affiliations, 1 identity (36 records).",
+  "metadata": "Complete user-supplied table privileges, policies, constraints, function inventory and event-trigger definition reviewed.",
+  "localVerification": {
+    "lint": "PASS",
+    "typecheck": "PASS",
+    "tests": "160 tests passed across 14 files, including local embedded PostgreSQL tests; not hosted evidence",
+    "build": "PASS on final run after metadata reconciliation; approved worker process access",
+    "diffCheck": "PASS",
+    "constraintScript": "37 local PostgreSQL checks passed; outer rollback preserved original affiliation snapshot",
+    "note": "Final checks rerun after evidence reconciliation; results recorded below. No hosted operation performed by the agent during this reconciliation."
+  },
+  "hostedAccessThisTurn": true,
+  "startedAt": "2026-10-14T19:36:38.154Z",
+  "roleEvidence": {
+    "userACommissioner": true
+  },
+  "observations": {
+    "visibleFixtureCounts": {
+      "schools": 2,
+      "wrestlers": 9,
+      "programs": 2,
+      "affiliations": 7,
+      "currentPool": 5
+    },
+    "crossLeagueMembershipsAvailable": true
+  },
+  "regressionArtifacts": "No new league/team records. Existing ordinary owner successfully submitted unchanged team name; updated_at refreshed. Invite code and user/league/team identifiers omitted.",
+  "constraintScript": "Original raw hosted grid retained: 36 PASS, 1 FAIL (23001 expected, 23503 observed on blocked provider deletion). Test 33 requirement resolved by hosted metadata review, not by altering or rerunning that grid. Earlier local run had 37 PASS.",
+  "artifacts": "36 user-created synthetic catalog fixtures retained as approved; no catalog rows created/changed/deleted by ordinary-session tests. Four temporary runner/generator files removed; no tokens persisted. Existing team same-name rename refreshed updated_at.",
+  "scope": "Public/publishable key only, three distinct ordinary sessions, DEVELOPMENT URL matched locally supplied project reference. No service-role key, migrations, production, commits, push, importer or 4B-2 work. SQL Editor execution remains user-controlled and separate.",
+  "completedAt": "2026-10-14T19:41:21.961Z",
+  "totals": {
+    "PASS": 40,
+    "FAIL": 0,
+    "NOT RUN": 0
+  },
+  "hostedConstraintRun": {
+    "source": "User-supplied hosted DEVELOPMENT SQL Editor result grid",
+    "results": [
+      {
+        "test": 16,
+        "label": "pending official roster evidence",
+        "expected": "23514",
+        "actual": "23514",
+        "status": "PASS"
+      },
+      {
+        "test": 16,
+        "label": "roster verification timestamp mismatch",
+        "expected": "23514",
+        "actual": "23514",
+        "status": "PASS"
+      },
+      {
+        "test": 16,
+        "label": "wrong classification evidence kind",
+        "expected": "23514",
+        "actual": "23514",
+        "status": "PASS"
+      },
+      {
+        "test": 16,
+        "label": "wrong roster evidence kind",
+        "expected": "23514",
+        "actual": "23514",
+        "status": "PASS"
+      },
+      {
+        "test": 17,
+        "label": "nonofficial classification evidence",
+        "expected": "23514",
+        "actual": "23514",
+        "status": "PASS"
+      },
+      {
+        "test": 17,
+        "label": "nonofficial roster evidence",
+        "expected": "23514",
+        "actual": "23514",
+        "status": "PASS"
+      },
+      {
+        "test": 18,
+        "label": "provider evidence mismatch",
+        "expected": "23503",
+        "actual": "23503",
+        "status": "PASS"
+      },
+      {
+        "test": 19,
+        "label": "duplicate provider namespace key",
+        "expected": "23505",
+        "actual": "23505",
+        "status": "PASS"
+      },
+      {
+        "test": 28,
+        "label": "transfer and return preserve identity/history",
+        "status": "PASS",
+        "expected": "OK",
+        "actual": "OK"
+      },
+      {
+        "test": 29,
+        "label": "conflicting approved school",
+        "expected": "23505",
+        "actual": "23505",
+        "status": "PASS"
+      },
+      {
+        "test": 29,
+        "label": "duplicate current same-school revision",
+        "expected": "23505",
+        "actual": "23505",
+        "status": "PASS"
+      },
+      {
+        "test": 30,
+        "label": "closure predating verification",
+        "expected": "23514",
+        "actual": "23514",
+        "status": "PASS"
+      },
+      {
+        "test": 30,
+        "label": "historical affiliation delete",
+        "expected": "23514",
+        "actual": "23514",
+        "status": "PASS"
+      },
+      {
+        "test": 30,
+        "label": "historical affiliation reopen",
+        "expected": "23514",
+        "actual": "23514",
+        "status": "PASS"
+      },
+      {
+        "test": 30,
+        "label": "historical affiliation rewrite",
+        "expected": "23514",
+        "actual": "23514",
+        "status": "PASS"
+      },
+      {
+        "test": 31,
+        "label": "evidence delete",
+        "expected": "23514",
+        "actual": "23514",
+        "status": "PASS"
+      },
+      {
+        "test": 31,
+        "label": "evidence rewrite",
+        "expected": "23514",
+        "actual": "23514",
+        "status": "PASS"
+      },
+      {
+        "test": 32,
+        "label": "failed replacement rolls closure back",
+        "status": "PASS",
+        "expected": "23514 and identical original row",
+        "actual": "23514"
+      },
+      {
+        "test": 33,
+        "label": "missing evidence FK",
+        "expected": "23503",
+        "actual": "23503",
+        "status": "PASS"
+      },
+      {
+        "test": 33,
+        "label": "missing provider FK",
+        "expected": "23503",
+        "actual": "23503",
+        "status": "PASS"
+      },
+      {
+        "test": 33,
+        "label": "missing school season FK",
+        "expected": "23503",
+        "actual": "23503",
+        "status": "PASS"
+      },
+      {
+        "test": 33,
+        "label": "missing wrestler FK",
+        "expected": "23503",
+        "actual": "23503",
+        "status": "PASS"
+      },
+      {
+        "test": 33,
+        "label": "referenced provider delete",
+        "expected": "23001",
+        "actual": "23503",
+        "status": "FAIL"
+      },
+      {
+        "test": 34,
+        "label": "allowed weight 125",
+        "expected": "OK",
+        "actual": "OK",
+        "status": "PASS"
+      },
+      {
+        "test": 34,
+        "label": "allowed weight 133",
+        "expected": "OK",
+        "actual": "OK",
+        "status": "PASS"
+      },
+      {
+        "test": 34,
+        "label": "allowed weight 141",
+        "expected": "OK",
+        "actual": "OK",
+        "status": "PASS"
+      },
+      {
+        "test": 34,
+        "label": "allowed weight 149",
+        "expected": "OK",
+        "actual": "OK",
+        "status": "PASS"
+      },
+      {
+        "test": 34,
+        "label": "allowed weight 157",
+        "expected": "OK",
+        "actual": "OK",
+        "status": "PASS"
+      },
+      {
+        "test": 34,
+        "label": "allowed weight 165",
+        "expected": "OK",
+        "actual": "OK",
+        "status": "PASS"
+      },
+      {
+        "test": 34,
+        "label": "allowed weight 174",
+        "expected": "OK",
+        "actual": "OK",
+        "status": "PASS"
+      },
+      {
+        "test": 34,
+        "label": "allowed weight 184",
+        "expected": "OK",
+        "actual": "OK",
+        "status": "PASS"
+      },
+      {
+        "test": 34,
+        "label": "allowed weight 197",
+        "expected": "OK",
+        "actual": "OK",
+        "status": "PASS"
+      },
+      {
+        "test": 34,
+        "label": "allowed weight 285",
+        "expected": "OK",
+        "actual": "OK",
+        "status": "PASS"
+      },
+      {
+        "test": 35,
+        "label": "invalid weight -1",
+        "expected": "23514",
+        "actual": "23514",
+        "status": "PASS"
+      },
+      {
+        "test": 35,
+        "label": "invalid weight 0",
+        "expected": "23514",
+        "actual": "23514",
+        "status": "PASS"
+      },
+      {
+        "test": 35,
+        "label": "invalid weight 126",
+        "expected": "23514",
+        "actual": "23514",
+        "status": "PASS"
+      },
+      {
+        "test": 35,
+        "label": "invalid weight 286",
+        "expected": "23514",
+        "actual": "23514",
+        "status": "PASS"
+      }
+    ],
+    "passed": 36,
+    "failed": 1,
+    "interpretation": "Referenced provider deletion was rejected with 23503 rather than expected 23001. The original failed assertion is retained. No successful deletion or broken referential integrity is evidenced. Await actual FK definitions before deciding how to revise the portable test expectation.",
+    "resolution": "Test 33 requirement PASS after reviewing actual hosted ON DELETE RESTRICT definitions and observed blocked deletion. Raw grid remains 36 PASS / 1 FAIL: expected SQLSTATE was too specific to the local runtime. Original SQL script and original result preserved unchanged. No database defect identified."
+  },
+  "functionMetadataReview": {
+    "source": "User-supplied pg_proc inventory for public/private schemas",
+    "catalogPredicate": {
+      "name": "private.catalog_evidence_approved(uuid,boolean,text)",
+      "owner": "postgres",
+      "securityDefiner": true,
+      "searchPath": "empty",
+      "anonExecute": false,
+      "authenticatedExecute": true
+    },
+    "catalogTriggers": {
+      "names": [
+        "private.catalog_updated_at",
+        "private.preserve_catalog_history",
+        "private.validate_catalog_approval"
+      ],
+      "owner": "postgres",
+      "securityDefiner": false,
+      "searchPath": "empty",
+      "anonExecute": false,
+      "authenticatedExecute": false
+    },
+    "unresolvedFunction": {
+      "name": "public.rls_auto_enable()",
+      "owner": "postgres",
+      "securityDefiner": true,
+      "searchPath": "pg_catalog",
+      "anonExecute": true,
+      "authenticatedExecute": true,
+      "returnType": "not supplied",
+      "definition": "not supplied",
+      "finding": "Requires read-only inspection. Name and EXECUTE grants alone do not establish an ordinary-callable write RPC or an exploitable defect.",
+      "resolution": "Resolved: returns event_trigger, bound to ensure_rls DDL event trigger; no ordinary catalog-write RPC identified."
+    }
+  },
+  "followup": "No further hosted SQL required for this matrix. Ready for a separately authorized verified Git checkpoint after final local checks; no commit/push authorized in this verification task.",
+  "hostedMetadata": {
+    "source": "User-supplied hosted DEVELOPMENT SQL Editor follow-up output",
+    "tables": [
+      {
+        "table_name": "catalog_evidence",
+        "anon_select": false,
+        "rls_enabled": true,
+        "authenticated_select": false,
+        "authenticated_any_write": false
+      },
+      {
+        "table_name": "catalog_external_identities",
+        "anon_select": false,
+        "rls_enabled": true,
+        "authenticated_select": false,
+        "authenticated_any_write": false
+      },
+      {
+        "table_name": "catalog_sources",
+        "anon_select": false,
+        "rls_enabled": true,
+        "authenticated_select": false,
+        "authenticated_any_write": false
+      },
+      {
+        "table_name": "wrestlers",
+        "anon_select": false,
+        "rls_enabled": true,
+        "authenticated_select": true,
+        "authenticated_any_write": false
+      },
+      {
+        "table_name": "wrestling_roster_affiliations",
+        "anon_select": false,
+        "rls_enabled": true,
+        "authenticated_select": true,
+        "authenticated_any_write": false
+      },
+      {
+        "table_name": "wrestling_school_seasons",
+        "anon_select": false,
+        "rls_enabled": true,
+        "authenticated_select": true,
+        "authenticated_any_write": false
+      },
+      {
+        "table_name": "wrestling_schools",
+        "anon_select": false,
+        "rls_enabled": true,
+        "authenticated_select": true,
+        "authenticated_any_write": false
+      }
+    ],
+    "policies": [
+      {
+        "cmd": "SELECT",
+        "qual": "(is_approved AND private.catalog_evidence_approved(evidence_id, false, 'identity'::text))",
+        "roles": [
+          "authenticated"
+        ],
+        "tablename": "wrestlers",
+        "policyname": "catalog_wrestlers_read",
+        "with_check": null
+      },
+      {
+        "cmd": "SELECT",
+        "qual": "(is_approved AND private.catalog_evidence_approved(evidence_id, true, 'official_roster'::text) AND (EXISTS ( SELECT 1\n   FROM wrestlers w\n  WHERE (w.id = wrestling_roster_affiliations.wrestler_id))) AND (EXISTS ( SELECT 1\n   FROM wrestling_school_seasons s\n  WHERE ((s.school_id = wrestling_roster_affiliations.school_id) AND (s.season_start_year = wrestling_roster_affiliations.season_start_year)))))",
+        "roles": [
+          "authenticated"
+        ],
+        "tablename": "wrestling_roster_affiliations",
+        "policyname": "catalog_affiliations_read",
+        "with_check": null
+      },
+      {
+        "cmd": "SELECT",
+        "qual": "((classification = 'ncaa_di_men'::text) AND private.catalog_evidence_approved(evidence_id, true, 'program_classification'::text) AND (EXISTS ( SELECT 1\n   FROM wrestling_schools s\n  WHERE (s.id = wrestling_school_seasons.school_id))))",
+        "roles": [
+          "authenticated"
+        ],
+        "tablename": "wrestling_school_seasons",
+        "policyname": "catalog_programs_read",
+        "with_check": null
+      },
+      {
+        "cmd": "SELECT",
+        "qual": "(is_approved AND private.catalog_evidence_approved(evidence_id, false, 'identity'::text))",
+        "roles": [
+          "authenticated"
+        ],
+        "tablename": "wrestling_schools",
+        "policyname": "catalog_schools_read",
+        "with_check": null
+      }
+    ],
+    "constraints": [
+      {
+        "conname": "catalog_evidence_check",
+        "definition": "CHECK (((last_verified_at IS NULL) OR (last_verified_at >= observed_at)))",
+        "table_name": "catalog_evidence"
+      },
+      {
+        "conname": "catalog_evidence_check1",
+        "definition": "CHECK (((review_status <> 'approved'::text) OR (last_verified_at IS NOT NULL)))",
+        "table_name": "catalog_evidence"
+      },
+      {
+        "conname": "catalog_evidence_evidence_kind_check",
+        "definition": "CHECK ((evidence_kind = ANY (ARRAY['identity'::text, 'program_classification'::text, 'official_roster'::text])))",
+        "table_name": "catalog_evidence"
+      },
+      {
+        "conname": "catalog_evidence_id_source_id_key",
+        "definition": "UNIQUE (id, source_id)",
+        "table_name": "catalog_evidence"
+      },
+      {
+        "conname": "catalog_evidence_pkey",
+        "definition": "PRIMARY KEY (id)",
+        "table_name": "catalog_evidence"
+      },
+      {
+        "conname": "catalog_evidence_review_status_check",
+        "definition": "CHECK ((review_status = ANY (ARRAY['pending'::text, 'approved'::text, 'rejected'::text])))",
+        "table_name": "catalog_evidence"
+      },
+      {
+        "conname": "catalog_evidence_source_id_fkey",
+        "definition": "FOREIGN KEY (source_id) REFERENCES catalog_sources(id) ON DELETE RESTRICT",
+        "table_name": "catalog_evidence"
+      },
+      {
+        "conname": "catalog_evidence_source_reference_check",
+        "definition": "CHECK (((char_length(btrim(source_reference)) >= 1) AND (char_length(btrim(source_reference)) <= 2000)))",
+        "table_name": "catalog_evidence"
+      },
+      {
+        "conname": "catalog_evidence_summary_check",
+        "definition": "CHECK (((char_length(btrim(summary)) >= 1) AND (char_length(btrim(summary)) <= 2000)))",
+        "table_name": "catalog_evidence"
+      },
+      {
+        "conname": "catalog_external_identities_check",
+        "definition": "CHECK ((((entity_kind = 'school'::text) AND (school_id IS NOT NULL) AND (wrestler_id IS NULL)) OR ((entity_kind = 'wrestler'::text) AND (wrestler_id IS NOT NULL) AND (school_id IS NULL))))",
+        "table_name": "catalog_external_identities"
+      },
+      {
+        "conname": "catalog_external_identities_entity_kind_check",
+        "definition": "CHECK ((entity_kind = ANY (ARRAY['school'::text, 'wrestler'::text])))",
+        "table_name": "catalog_external_identities"
+      },
+      {
+        "conname": "catalog_external_identities_evidence_id_source_id_fkey",
+        "definition": "FOREIGN KEY (evidence_id, source_id) REFERENCES catalog_evidence(id, source_id) ON DELETE RESTRICT",
+        "table_name": "catalog_external_identities"
+      },
+      {
+        "conname": "catalog_external_identities_external_key_check",
+        "definition": "CHECK (((char_length(btrim(external_key)) >= 1) AND (octet_length(external_key) <= 1000)))",
+        "table_name": "catalog_external_identities"
+      },
+      {
+        "conname": "catalog_external_identities_pkey",
+        "definition": "PRIMARY KEY (id)",
+        "table_name": "catalog_external_identities"
+      },
+      {
+        "conname": "catalog_external_identities_school_id_fkey",
+        "definition": "FOREIGN KEY (school_id) REFERENCES wrestling_schools(id) ON DELETE RESTRICT",
+        "table_name": "catalog_external_identities"
+      },
+      {
+        "conname": "catalog_external_identities_source_id_entity_kind_external__key",
+        "definition": "UNIQUE (source_id, entity_kind, external_key)",
+        "table_name": "catalog_external_identities"
+      },
+      {
+        "conname": "catalog_external_identities_source_id_fkey",
+        "definition": "FOREIGN KEY (source_id) REFERENCES catalog_sources(id) ON DELETE RESTRICT",
+        "table_name": "catalog_external_identities"
+      },
+      {
+        "conname": "catalog_external_identities_wrestler_id_fkey",
+        "definition": "FOREIGN KEY (wrestler_id) REFERENCES wrestlers(id) ON DELETE RESTRICT",
+        "table_name": "catalog_external_identities"
+      },
+      {
+        "conname": "catalog_sources_name_check",
+        "definition": "CHECK (((char_length(btrim(name)) >= 1) AND (char_length(btrim(name)) <= 200)))",
+        "table_name": "catalog_sources"
+      },
+      {
+        "conname": "catalog_sources_pkey",
+        "definition": "PRIMARY KEY (id)",
+        "table_name": "catalog_sources"
+      },
+      {
+        "conname": "catalog_sources_provider_key_check",
+        "definition": "CHECK ((provider_key ~ '^[a-z][a-z0-9_]{1,63}$'::text))",
+        "table_name": "catalog_sources"
+      },
+      {
+        "conname": "catalog_sources_provider_key_key",
+        "definition": "UNIQUE (provider_key)",
+        "table_name": "catalog_sources"
+      },
+      {
+        "conname": "wrestlers_evidence_id_fkey",
+        "definition": "FOREIGN KEY (evidence_id) REFERENCES catalog_evidence(id) ON DELETE RESTRICT",
+        "table_name": "wrestlers"
+      },
+      {
+        "conname": "wrestlers_first_name_check",
+        "definition": "CHECK (((char_length(btrim(first_name)) >= 1) AND (char_length(btrim(first_name)) <= 100)))",
+        "table_name": "wrestlers"
+      },
+      {
+        "conname": "wrestlers_last_name_check",
+        "definition": "CHECK (((char_length(btrim(last_name)) >= 1) AND (char_length(btrim(last_name)) <= 100)))",
+        "table_name": "wrestlers"
+      },
+      {
+        "conname": "wrestlers_pkey",
+        "definition": "PRIMARY KEY (id)",
+        "table_name": "wrestlers"
+      },
+      {
+        "conname": "wrestling_roster_affiliations_check",
+        "definition": "CHECK (((last_verified_at IS NULL) OR (last_verified_at >= first_observed_at)))",
+        "table_name": "wrestling_roster_affiliations"
+      },
+      {
+        "conname": "wrestling_roster_affiliations_check1",
+        "definition": "CHECK (((superseded_at IS NULL) OR (superseded_at >= COALESCE(last_verified_at, first_observed_at))))",
+        "table_name": "wrestling_roster_affiliations"
+      },
+      {
+        "conname": "wrestling_roster_affiliations_check2",
+        "definition": "CHECK (((NOT is_approved) OR ((last_verified_at IS NOT NULL) AND (roster_status <> 'unverified'::text))))",
+        "table_name": "wrestling_roster_affiliations"
+      },
+      {
+        "conname": "wrestling_roster_affiliations_evidence_id_fkey",
+        "definition": "FOREIGN KEY (evidence_id) REFERENCES catalog_evidence(id) ON DELETE RESTRICT",
+        "table_name": "wrestling_roster_affiliations"
+      },
+      {
+        "conname": "wrestling_roster_affiliations_pkey",
+        "definition": "PRIMARY KEY (id)",
+        "table_name": "wrestling_roster_affiliations"
+      },
+      {
+        "conname": "wrestling_roster_affiliations_primary_weight_check",
+        "definition": "CHECK ((primary_weight = ANY (ARRAY[125, 133, 141, 149, 157, 165, 174, 184, 197, 285])))",
+        "table_name": "wrestling_roster_affiliations"
+      },
+      {
+        "conname": "wrestling_roster_affiliations_roster_status_check",
+        "definition": "CHECK ((roster_status = ANY (ARRAY['unverified'::text, 'rostered'::text, 'removed'::text])))",
+        "table_name": "wrestling_roster_affiliations"
+      },
+      {
+        "conname": "wrestling_roster_affiliations_school_id_season_start_year_fkey",
+        "definition": "FOREIGN KEY (school_id, season_start_year) REFERENCES wrestling_school_seasons(school_id, season_start_year) ON DELETE RESTRICT",
+        "table_name": "wrestling_roster_affiliations"
+      },
+      {
+        "conname": "wrestling_roster_affiliations_wrestler_id_fkey",
+        "definition": "FOREIGN KEY (wrestler_id) REFERENCES wrestlers(id) ON DELETE RESTRICT",
+        "table_name": "wrestling_roster_affiliations"
+      },
+      {
+        "conname": "wrestling_school_seasons_classification_check",
+        "definition": "CHECK ((classification = ANY (ARRAY['unverified'::text, 'ncaa_di_men'::text, 'ineligible'::text])))",
+        "table_name": "wrestling_school_seasons"
+      },
+      {
+        "conname": "wrestling_school_seasons_evidence_id_fkey",
+        "definition": "FOREIGN KEY (evidence_id) REFERENCES catalog_evidence(id) ON DELETE RESTRICT",
+        "table_name": "wrestling_school_seasons"
+      },
+      {
+        "conname": "wrestling_school_seasons_pkey",
+        "definition": "PRIMARY KEY (school_id, season_start_year)",
+        "table_name": "wrestling_school_seasons"
+      },
+      {
+        "conname": "wrestling_school_seasons_school_id_fkey",
+        "definition": "FOREIGN KEY (school_id) REFERENCES wrestling_schools(id) ON DELETE RESTRICT",
+        "table_name": "wrestling_school_seasons"
+      },
+      {
+        "conname": "wrestling_school_seasons_season_start_year_check",
+        "definition": "CHECK (((season_start_year >= 1900) AND (season_start_year <= 9998)))",
+        "table_name": "wrestling_school_seasons"
+      },
+      {
+        "conname": "wrestling_schools_athletics_url_check",
+        "definition": "CHECK (((athletics_url IS NULL) OR (athletics_url ~ '^https://[^[:space:]]+$'::text)))",
+        "table_name": "wrestling_schools"
+      },
+      {
+        "conname": "wrestling_schools_evidence_id_fkey",
+        "definition": "FOREIGN KEY (evidence_id) REFERENCES catalog_evidence(id) ON DELETE RESTRICT",
+        "table_name": "wrestling_schools"
+      },
+      {
+        "conname": "wrestling_schools_official_name_check",
+        "definition": "CHECK (((char_length(btrim(official_name)) >= 1) AND (char_length(btrim(official_name)) <= 200)))",
+        "table_name": "wrestling_schools"
+      },
+      {
+        "conname": "wrestling_schools_pkey",
+        "definition": "PRIMARY KEY (id)",
+        "table_name": "wrestling_schools"
+      },
+      {
+        "conname": "wrestling_schools_roster_url_check",
+        "definition": "CHECK (((roster_url IS NULL) OR (roster_url ~ '^https://[^[:space:]]+$'::text)))",
+        "table_name": "wrestling_schools"
+      }
+    ],
+    "rls_auto_enable": [
+      {
+        "owner": "postgres",
+        "returns": "event_trigger",
+        "proconfig": [
+          "search_path=pg_catalog"
+        ],
+        "prosecdef": true,
+        "definition": "CREATE OR REPLACE FUNCTION public.rls_auto_enable()\n RETURNS event_trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog'\nAS $function$\nDECLARE\n  cmd record;\nBEGIN\n  FOR cmd IN\n    SELECT *\n    FROM pg_event_trigger_ddl_commands()\n    WHERE command_tag IN ('CREATE TABLE', 'CREATE TABLE AS', 'SELECT INTO')\n      AND object_type IN ('table','partitioned table')\n  LOOP\n     IF cmd.schema_name IS NOT NULL AND cmd.schema_name IN ('public') AND cmd.schema_name NOT IN ('pg_catalog','information_schema') AND cmd.schema_name NOT LIKE 'pg_toast%' AND cmd.schema_name NOT LIKE 'pg_temp%' THEN\n      BEGIN\n        EXECUTE format('alter table if exists %s enable row level security', cmd.object_identity);\n        RAISE LOG 'rls_auto_enable: enabled RLS on %', cmd.object_identity;\n      EXCEPTION\n        WHEN OTHERS THEN\n          RAISE LOG 'rls_auto_enable: failed to enable RLS on %', cmd.object_identity;\n      END;\n     ELSE\n        RAISE LOG 'rls_auto_enable: skip % (either system schema or not in enforced list: %.)', cmd.object_identity, cmd.schema_name;\n     END IF;\n  END LOOP;\nEND;\n$function$\n",
+        "anon_execute": true,
+        "function_name": "rls_auto_enable()",
+        "event_triggers": [
+          {
+            "name": "ensure_rls",
+            "tags": [
+              "CREATE TABLE",
+              "CREATE TABLE AS",
+              "SELECT INTO"
+            ],
+            "event": "ddl_command_end",
+            "enabled": "O"
+          }
+        ],
+        "authenticated_execute": true
+      }
+    ]
+  }
+}

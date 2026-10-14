@@ -1,12 +1,12 @@
 # Architecture
 
-Milestones 1-3 are complete; Milestones 2 and 3 are hosted-verified in DEVELOPMENT. Both additive repairs are applied. See [verification results](MILESTONE_3_HOSTED_RETEST.md). Milestone 4A is complete and hosted-verified in DEVELOPMENT (see [results and scope](MILESTONE_4A_HOSTED_RESULTS.md)); Milestone 4B has not started; production deployment has not occurred.
+Milestones 1-3 are complete; Milestones 2 and 3 are hosted-verified in DEVELOPMENT. Both additive repairs are applied. See [verification results](MILESTONE_3_HOSTED_RETEST.md). Milestone 4A is complete and hosted-verified in DEVELOPMENT (see [results and scope](MILESTONE_4A_HOSTED_RESULTS.md)); Milestone 4B-1 is complete and hosted-verified in DEVELOPMENT (see the hosted report for evidence scope and the resolved SQLSTATE assertion mismatch); Milestone 4B-2 has not started; production deployment has not occurred.
 
 ## Core boundary
 
 Real-world wrestling data and fantasy league data are separate concepts and should remain separate in storage, APIs, and application logic.
 
-- **Wrestling data** represents real participants, teams, weights, events, matches, and results. It may be supplied by manual commissioner entry, an external API, or a scraper/importer. Provider-specific acquisition and normalization belong at this boundary; the application must not depend on one provider's format.
+- **Wrestling data** represents real participants, teams, weights, events, matches, and results. The global school/person/official-roster catalog will be populated only by a controlled backend using permitted external sources; commissioners cannot edit it. Provider-specific acquisition and normalization belong at this boundary; the application must not depend on one provider's format.
 - **Fantasy league data** represents single-season leagues, teams, rosters, drafts, lineup choices, fantasy matchups, scoring outcomes, standings, and audit history. It consumes normalized wrestling data but owns fantasy rules and league state.
 
 Imported result corrections must preserve an auditable history. Ingestion providers should not write fantasy scoring outcomes directly; downstream domain logic will interpret normalized results according to league rules.
@@ -47,11 +47,11 @@ League routes use UUIDs rather than display names: `/leagues/new`, `/leagues/joi
 
 ## Current scope
 
-Milestone 1 is complete. Milestone 2 is complete and hosted-verified, including signup/login and profile RLS checks. Milestone 3 is complete and hosted-verified: all 18 tests and checks A-G passed on fresh development fixtures. Both repair migrations (`202610050001` and `202610050002`) are applied to DEVELOPMENT. Milestone 4A is complete and hosted-verified; the fifth migration is applied to DEVELOPMENT. Milestone 4B has not started. Production deployment has not occurred.
+Milestone 1 is complete. Milestone 2 is complete and hosted-verified, including signup/login and profile RLS checks. Milestone 3 is complete and hosted-verified: all 18 tests and checks A-G passed on fresh development fixtures. Both repair migrations (`202610050001` and `202610050002`) are applied to DEVELOPMENT. Milestone 4A is complete and hosted-verified; the fifth migration is applied to DEVELOPMENT. Milestone 4B-1 is complete and hosted-verified in DEVELOPMENT (see the hosted report for evidence scope and the resolved SQLSTATE assertion mismatch); Milestone 4B-2 has not started. Production deployment has not occurred.
 
 The original league migration preserves its historical invite case bug, restrictive creator FK, and ambiguous join conflict clause. The applied additive repairs fix those defects. Applied migrations are immutable; do not edit or rerun them.
 
-Milestone 3 covers league creation/joining, membership, commissioner management, invite-code management, and league selection. Wrestlers/schools, drafts, rosters, schedules, matchups, scoring, free agency, postseason, league copying, and wrestling-data ingestion remain unimplemented. See [hosted results](MILESTONE_3_HOSTED_RETEST.md) and [development setup](SUPABASE_DEVELOPMENT.md).
+Milestone 3 covers league creation/joining, membership, commissioner management, invite-code management, and league selection. The global catalog foundation is implemented locally in 4B-1; real data, imports, drafts, fantasy rosters, schedules, matchups, scoring, free agency, postseason and league copying remain unimplemented. See [hosted results](MILESTONE_3_HOSTED_RETEST.md) and [development setup](SUPABASE_DEVELOPMENT.md).
 
 ## Milestone 4A (hosted-verified in DEVELOPMENT)
 
@@ -60,3 +60,7 @@ One league equals one season, represented by season_start_year; there is no seas
 Teams belong directly to one league and one Auth user. UNIQUE (league_id, owner_user_id), RLS member-scoped reads, and authenticated create/rename RPCs enforce ownership and membership. Parent-league locks serialize these operations with membership/status changes. Removal or leave retains teams; current membership is still required for reads and renames. User/league RESTRICT foreign keys protect historical teams until deletion/transfer policy is decided. Commissioners have no ownership override.
 
 Nullable copied_from_league_id with SET NULL records future lineage only; no copy workflow exists. Weights are fixed system constants in the product rules; no weight data is needed by 4A code. Global wrestler/school data is reserved for 4B. See [the full model and rollout choices](MILESTONE_4A.md) and [hosted verification checklist](MILESTONE_4A_VERIFICATION.md). Existing handwritten database-facing contracts are extended locally; no hosted type generation is attempted during this implementation.
+
+## Milestone 4B-1 (DEVELOPMENT hosted-verified)
+
+Global school/person identities, verified school-season program classification and immutable roster revisions are separate from fantasy teams. Approved official DI roster membership controls the season pool; known fixed NCAA weight additionally controls weight-slot eligibility. Provenance and external identities are backend-only; ordinary authenticated users receive approved catalog SELECT access only. There is no catalog write RPC, importer or new UI. See [schema and decisions](MILESTONE_4B1.md) and [hosted verification checks](MILESTONE_4B1_VERIFICATION.md).
